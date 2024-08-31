@@ -1,0 +1,94 @@
+﻿<head>
+    <meta charset="UTF-8">
+    <title>거래처 총미수금 현황</title>
+</head>
+<body>
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="container">
+    {% if transports %}
+
+    <table class="table table-bordered table-striped small-text"  style="width:100%">
+        <thead class="thead-dark">
+        <tr>
+            <td colspan="6" align="center"><h5>기간별 총미수금 현황</h5></td>
+            <td colspan="4" align="center"><h5>오늘 날짜 : {{ today_date }}</h5></td>
+        </tr>
+
+        <tr>
+            <th style="width:3%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">운송 일자</th>
+            <th style="width:10%" class="text-center">회사명</th>
+            <th style="width:10%" class="text-center">송하주</th>
+            <th style="width:15%" class="text-center">상차지</th>
+            <th style="width:10%" class="text-center">수하주</th>
+            <th style="width:15%" class="text-center">하차지</th>
+            <th style="width:8%" class="text-center">거래조건</th>
+            <th style="width:6%" class="text-center">운송료</th>
+            <th style="width:6%" class="text-center">수수료</th>
+        </tr>
+        </thead>
+
+        <tbody>
+            {% set ns = namespace(total_amount=0, total_fee=0) %}
+            {% for idx, transport in enumerate(transports) %}
+
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td align="center">{{ transport.trans_date }}</td>
+            <td>{{ transport.trans_company }}</td>
+            <td>{{ transport.consignor }}</td>
+            <td>{{ transport.load_region }}</td>
+            <td>{{ transport.consignee }}</td>
+            <td>{{ transport.unload_region }}</td>
+            <td class="text-center">{{ terms_choices[transport.terms] }}</td>
+
+            <td align="center">
+                {% if transport.trans_amount is not none %}
+                    {{ "{:,.0f}".format(transport.trans_amount) }}
+                {% else %}
+                    0&nbsp;&nbsp;
+                {% endif %}
+            </td>
+            {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
+            <td align="center">
+                {% if transport.brokerage_fee is not none %}
+                    {{ "{:,.0f}".format(transport.brokerage_fee) }}
+                {% else %}
+                    0&nbsp;&nbsp;
+                {% endif %}
+            </td>
+            {% set ns.total_fee = ns.total_fee + (transport.brokerage_fee or 0) %}
+
+        </tr>
+            {% endfor %}
+        <tr>
+            <td colspan="8" align="center">총 금액</td>
+            <td align="center">{{ "{:,.0f}".format(ns.total_amount) }}</td>
+            <td align="center">{{ "{:,.0f}".format(ns.total_fee) }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="no-print">
+    <table>
+        <tr>
+            <th>
+                <a href="{{ url_for('transport.total_unpaid_print', start_date=start_date,
+                        end_date=end_date) }}" class="btn btn-secondary">요약정리 인쇄하기</a>
+            </th>
+        </tr>
+    </table>
+    </div>
+
+
+    {% else %}
+        <p class="text-center">검색 결과가 없습니다.</p>
+    {% endif %}
+
+</div>
+
+</body>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .small-text {
+        font-size: 0.875em;
+    }
+</style>
+<br>
+
+<div class="container">
+    <h5 class="text-center"> {{ request.form['trans_company'] }} 회사별 운송입금</h5>
+    <form method="post" action="{{ url_for('transport.trans_company_set') }}">
+
+        {{ form.hidden_tag() }}
+        {% include "form_errors.html" %}
+
+    {% if transports %}
+    <table class="table table-bordered table-striped small-text">
+        <thead class="thead-dark">
+        <tr>
+            <th style="width:3%" class="text-center">NO</th>
+            <th style="width:10%" class="text-center">운송 일자</th>
+            <th style="width:12%" class="text-center">송하주</th>
+            <th style="width:15%" class="text-center">상차지</th>
+            <th style="width:12%" class="text-center">수하주</th>
+            <th style="width:15%" class="text-center">하차지</th>
+            <th style="width:8%" class="text-center">거래 조건</th>
+            <th style="width:7%" class="text-center">운송료</th>
+            <!--
+            <th style="width:7%" class="text-center">알선료</th>
+            -->
+            <th style="width:10%" class="text-center">입금일자</th>
+        </tr>
+        </thead>
+
+        <tbody>
+            {% set ns = namespace(total_amount=0, total_fee=0) %}
+            {% for idx, transport in enumerate(transports) %}
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td align="center">{{ transport.trans_date }}</td>
+            <td>{{ transport.consignor }}</td>
+            <td>{{ transport.load_region }}</td>
+            <td>{{ transport.consignee }}</td>
+            <td>{{ transport.unload_region }}</td>
+            <td class="text-center">{{ terms_choices[transport.terms] }}</td>
+            <td align="right">{{ "{:,.0f}".format(transport.trans_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                {% set ns.total_amount = ns.total_amount + transport.trans_amount %}
+            <!--
+            <td align="right">{{ "{:,.0f}".format(transport.brokerage_fee or 0) }}&nbsp;&nbsp;&nbsp;</td>
+                {% set ns.total_fee = ns.total_fee + (transport.brokerage_fee or 0) %}
+           -->
+           <td>
+               <input type="date" class="form-control" name="trans_set_date_{{ transport.id }}" value="{{ transport.trans_set_date|default('') }}">
+           </td>
+        </tr>
+            {% endfor %}
+        <tr>
+            <td colspan="7" align="center">총 금액</td>
+            <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <!--
+            <td align="right">{{ "{:,.0f}".format(ns.total_fee) }}&nbsp;&nbsp;</td>
+            -->
+            <td>&nbsp;</td>
+        </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+
+    <div>
+        <button type="submit" class="btn btn-primary">입금 일자 저장</button>
+    </div>
+    </form>
+</div>
+
+{% endblock %}
+

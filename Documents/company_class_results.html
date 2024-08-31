@@ -1,0 +1,80 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .small-text {
+        font-size: 0.875em;
+    }
+</style>
+<br>
+<div class="container">
+    <h5 class="text-center">분류별 업체 현황 결과</h5>
+    <br>
+    {% if companies %}
+
+    <table class="table table-bordered table-striped small-text">
+        <thead class="thead-dark">
+        <tr><td colspan="10" align="left">&nbsp;&nbsp;{{ company_class_choices['R'] }}&nbsp;&nbsp;현황</td></tr>
+        <tr>
+            <th style="width:3%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">등록 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:10%" class="text-center">사업자 등록번호</th>
+            <th style="width:6%" class="text-center">대표자</th>
+            <th style="width:6%" class="text-center">우편번호</th>
+            <th style="width:18%" class="text-center">사업장 주소</th>
+            <th style="width:8%" class="text-center">업태</th>
+            <th style="width:10%" class="text-center">종목</th>
+            <th style="width:18%" class="text-center">이메일</th>
+        </tr>
+        </thead>
+        {% for company in companies %}
+            {% if company.company_class == 'R' %}
+        <tbody>
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td align="center">{{ company.register_date }}</td>
+            <td align="center">{{ company.firm }}</td>
+            <td align="center">{{ company.business_no }}</td>
+            <td align="center">{{ company.president }}</td>
+            <td align="center">{{ company.zip }}</td>
+            <td align="center">{{ company.address }}</td>
+            <td align="center">{{ company.business_status }}</td>
+            <td align="center">{{ company.business_item }}</td>
+            <td align="center">{{ company.email }}</td>
+        </tr>
+            {% endif %}
+
+            {% if company.company_class == 'P' %}
+        <tbody>
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td align="center">{{ company.register_date }}</td>
+            <td align="center">{{ company.firm }}</td>
+            <td align="center">{{ company.business_no }}</td>
+            <td align="center">{{ company.president }}</td>
+            <td align="center">{{ company.zip }}</td>
+            <td align="center">{{ company.address }}</td>
+            <td align="center">{{ company.business_status }}</td>
+            <td align="center">{{ company.business_item }}</td>
+            <td align="center">{{ company.email }}</td>
+        </tr>
+            {% endif %}
+
+
+
+        {% endfor %}
+
+            </tbody>
+
+    </table>
+
+
+
+
+    {% else %}
+        <p class="text-center">검색 결과가 없습니다.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

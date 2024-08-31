@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<br>
+<div class="container">
+    <h5 class="text-center">경비세금계산서 조회 결과</h5>
+    <table class="table table-bordered table-striped small-text">
+        <thead>
+            <tr>
+                <th class="text-center">NO</th>
+                <th class="text-center">사업자 등록번호</th>
+                <th class="text-center">회사명</th>
+                <th class="text-center">건수</th>
+                <th class="text-center">금액</th>
+                <th class="text-center">부가세</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set ns = namespace(total_amount=0, total_count=0) %}
+            {% for idx, row in enumerate(results) %}
+            <tr>
+                <td class="text-center">{{ idx + 1 }}</td>
+                <td class="text-center">{{ row.business_no }}</td>
+                <td class="text-center">{{ row.cost_company }}</td>
+                <td class="text-center">{{ row.company_count }}</td>
+                {% set ns.total_count = ns.total_count + (row.company_count or 0) %}
+                <td align="center">{{ "{:,.0f}".format(row.total_amount or 0) }}&nbsp;&nbsp;</td>
+                {% set ns.total_amount = ns.total_amount + (row.total_amount or 0) %}
+                <td align="center">{{ "{:,.0f}".format((row.total_amount)/10 or 0) }}&nbsp;&nbsp;</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-center"><strong>총합계</strong></td>
+                <td align="center"><strong>{{  "{:,.0f}".format(ns.total_count) }}</strong></td>
+                <td align="center"><strong>{{  "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;</strong></td>
+                <td align="center"><strong>{{  "{:,.0f}".format((ns.total_amount)/10) }}&nbsp;&nbsp;</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

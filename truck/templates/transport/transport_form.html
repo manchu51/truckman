@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Remove the arrows/spinners from number inputs */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .date-time-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .wide-input {
+        width: 100%;
+    }
+</style>
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<form method="post">
+    {{ form.csrf_token }}
+    {% include "form_errors.html" %}
+
+<div class="container-fluid">
+    <table style="width:100%" class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr bgcolor="#ffddee">
+            <th colspan="3" class="text-center"><h6><strong>운송 입력</strong></h6></th>
+            <th class="text-center" ><label for="trans_date">운송 일자</label></th>
+            <td colspan="2"><input type="date" class="form-control" id="trans_date" name="trans_date"
+                       placeholder="yyyy-mm-dd" style="width: 160px;" required>
+            </td>
+            <th class="text-center"><label for="trans_type">거래 형태</label></th>
+            <td style="background-color: yellow;">
+                <select class="form-control" id="trans_type" name="trans_type">
+                    <option value="N">정상거래</option>
+                    <option value="V">부가가치세용</option>
+                </select>
+            </td>
+            <!--<th colspan="1">&nbsp;</th>-->
+            <th colspan="4" class="text-center"><h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 :
+                {{ today|datetime('%Y-%m-%d') }} 시각 : {{ today|datetime('%H:%M:%S %p') }}
+                        </strong></h6></th>
+        </tr>
+
+        <tr style="width:100%" bgcolor="#ddeeff">
+            <th style="width:3%" class="text-center">NO</th>
+            <th style="width:9%" class="text-center"><label for="trans_company">회사명</label></th>
+            <th style="width:9%" class="text-center"><label for="consignor">송하주</label></th>
+            <th style="width:11%" class="text-center"><label for="load_region">상차지</label></th>
+            <th style="width:9%" class="text-center"><label for="unload_date">하차 일자</label></th>
+            <th style="width:8%" class="text-center"><label for="consignee">수하주</label></th>
+            <th style="width:11%" class="text-center"><label for="unload_region">하차지</label></th>
+            <th style="width:9%" class="text-center"><label for="terms">거래 조건</label></th>
+            <th style="width:7%" class="text-center"><label for="trans_amount">운송료</label></th>
+            <th style="width:6%" class="text-center"><label for="brokerage_fee">수수료</label></th>
+            <th style="width:11%" class="text-center"><label for="payment">거래 방법</label></th>
+            <th style="width:7%" class="text-center"><label for="comment">비고</label></th>
+        </tr>
+        </thead>
+
+        <tr style="width:100%" bgcolor="#ffffdd">
+            <td>{{ count }}1</td>
+            <td><input type="text" class="form-control" id="trans_company" name="trans_company"></td>
+            <td><input type="text" class="form-control" id="consignor" name="consignor"></td>
+            <td><input type="text" class="form-control" id="load_region" name="load_region" size="64"></td>
+            <td><input type="date" class="form-control" id="unload_date" name="unload_date" placeholder="yyyy-mm-dd" style="width: 130px;"></td>
+            <td><input type="text" class="form-control" id="consignee" name="consignee"></td>
+            <td><input type="text" class="form-control" id="unload_region" name="unload_region" size="64"></td>
+            <td>
+                <select class="form-control" id="terms" name="terms">
+                    <option value="TP">거래처선불</option>
+                    <option value="TF" selected>거래처후불</option>
+                    <option value="CP">송하주선불</option>
+                    <option value="CF">송하주후불</option>
+                    <option value="DP">수하주선불</option>
+                    <option value="DF">수하주후불</option>
+                </select>
+            </td>
+            <td><input type="number" class="form-control" id="trans_amount" name="trans_amount" required></td>
+            <td><input type="number" class="form-control" id="brokerage_fee" name="brokerage_fee"></td>
+            <td>
+                <select class="form-control" id="payment" name="payment">
+                    <option value="E">전자세금계산서</option>
+                    <option value="P">종이세금계산서</option>
+                    <option value="S">간이세금계산서</option>
+                    <option value="C">카드발급</option>
+                    <option value="R">간이영수증</option>
+                    <option value="M">현금영수증</option>
+                    <option value="O">기타</option>
+                </select>
+            </td>
+            <td><input type="text" class="form-control" id="comment" name="comment"></td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <button type="submit" class="btn btn-primary">운송 입력</button>
+            <td colspan="3" align="center" style="vertical-align: bottom;">
+                <h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 : {{ today|datetime('%Y-%m-%d') }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;운송 현황</strong></h6>
+            </td>
+            <td colspan="4" align="center">&nbsp;</td>
+        </tr>
+        {% if transports %}
+            {% for idx, transport in enumerate(transports) %}
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td>{{ transport.trans_company }}</td>
+            <td>{{ transport.consignor }}</td>
+            <td>{{ transport.load_region }}</td>
+            <td class="text-center">{{ transport.unload_date }}</td>
+            <td>{{ transport.consignee }}</td>
+            <td>{{ transport.unload_region }}</td>
+            <td class="text-center">{{ terms_choices[transport.terms] }}</td>
+            <td align="right">{{ "{:,.0f}".format(transport.trans_amount) }}&nbsp;&nbsp;</td>
+            <td align="right">{{ "{:,.0f}".format(transport.brokerage_fee) }}&nbsp;&nbsp;</td>
+            <td class="text-center">{{ payment_choices[transport.payment] }}</td>
+            <td>{{ transport.comment }}</td>
+        <tr>
+            {% endfor %}
+        {% endif %}
+
+    </table>
+</div>
+</form>
+
+{% endblock %}

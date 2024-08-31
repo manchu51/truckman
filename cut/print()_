@@ -1,0 +1,214 @@
+
+<style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 25mm 0mm;  /* 상단 여백 25mm, 좌우 여백 0mm */
+            }
+            body {
+                font-family: Arial, sans-serif;
+                font-size: smaller; /* 글자 크기를 작게 설정 */
+                margin: 0;  /* 기본 margin 제거 */
+            }
+            .container { width: 100%; }
+            h7 { text-align: center; font-size: 0.7em; margin: 0; padding: 2mm 0; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
+            th, td {
+                border: 1px solid #ddd; /* 각 칼럼에 가는 선 테두리 */
+                padding: 5px;
+                text-align: center;
+                font-size: smaller;
+            }
+            th { background-color: #ffddee; }
+            .total-row td { border: none; font-weight: bold; }
+            .no-print { display: none; }
+            /* 머리글과 바닥글 제거 */
+            header, footer {
+                display: none;
+            }
+        }
+
+         /* 비인쇄 요소 숨기기 */
+        .no-print {
+            display: none;
+        }
+
+        /* Additional styling for screen view */
+        body { font-family: Arial, sans-serif; }
+        .container { margin: 20px auto; width: 90%; }
+        h5 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 1; }
+        th, td {
+            border: 1px solid #ddd; /* 화면에서도 같은 스타일 적용 */
+            padding: 8px;
+        }
+        th { background-color: #f2f2f2; text-align: center; }
+        .total-row td { font-weight: bold; }
+        .text-center { text-align: center; }
+        .small-text { font-size: smaller; }
+    </style>
+
+    <script>
+        function printContent() {
+            const originalContent = document.body.innerHTML;  // 전체 페이지의 원본 내용을 저장합니다.
+            const printContent = document.querySelector('.container').outerHTML;  // 인쇄할 콘텐츠만 가져옵니다.
+
+            document.body.innerHTML = printContent;  // 인쇄할 콘텐츠로 페이지 내용을 교체합니다.
+            window.print();  // 인쇄 다이얼로그를 호출합니다.
+            setTimeout(() => {
+                document.body.innerHTML = originalContent;  // 페이지 내용을 원본으로 복구합니다.
+            }, 1000);  // 페이지 복구를 위해 약간의 지연을 추가합니다.
+        }
+    </script>
+
+ function printContent() {
+            const originalContent = document.body.innerHTML;  // 전체 페이지의 원본 내용을 저장합니다.
+            const printContent = document.querySelector('.container').outerHTML;  // 인쇄할 콘텐츠만 가져옵니다.
+
+            document.body.innerHTML = printContent;  // 인쇄할 콘텐츠로 페이지 내용을 교체합니다.
+            window.print();  // 인쇄 다이얼로그를 호출합니다.
+            setTimeout(() => {
+                document.body.innerHTML = originalContent;  // 페이지 내용을 원본으로 복구합니다.
+            }, 1000);  // 페이지 복구를 위해 약간의 지연을 추가합니다.
+        }
+
+
+
+
+        <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 10mm 0mm;  /* 상단 여백 10mm, 좌우 여백 0mm */
+            }
+            body {
+                font-family: Arial, sans-serif;
+                font-size: smaller; /* 글자 크기를 작게 설정 */
+                margin: 0;  /* 기본 margin 제거 */
+            }
+            .container { width: 100%; }
+            h7 { text-align: center; font-size: 0.7em; margin: 0; padding: 2mm 0; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
+            th, td {
+                border: 1px solid #ddd; /* 각 칼럼에 가는 선 테두리 */
+                padding: 5px;
+                text-align: center;
+                font-size: smaller;
+            }
+            th { background-color: #ffddee; }
+            .total-row td { border: none; font-weight: bold; }
+            .no-print { display: none; }
+            /* 머리글과 바닥글 제거 */
+            header, footer {
+                display: none;
+            }
+        }
+        /* Additional styling for screen view */
+        body { font-family: Arial, sans-serif; }
+        .container { margin: 20px auto; width: 90%; }
+        h5 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 1; }
+        th, td {
+            border: 1px solid #ddd; /* 화면에서도 같은 스타일 적용 */
+            padding: 8px;
+        }
+        th { background-color: #f2f2f2; text-align: center; }
+        .total-row td { font-weight: bold; }
+        .text-center { text-align: center; }
+        .small-text { font-size: smaller; }
+    </style>
+
+
+
+<style>
+    .no-print {
+        display: none !important; /* 강제 적용 */
+    }
+    /* 추가적인 스타일 설정 */
+    @media print {
+        .navbar {
+            display: none !important; /* 네비게이션 바를 인쇄에서 숨김 */
+        }
+    }
+</style>
+
+
+
+
+    <style>
+     .no-print {
+                display: none !important; /* 강제 적용 */
+     }
+
+     /* 추가적인 스타일 설정 */
+    @media print {
+        .navbar {
+            display: none !important; /* 네비게이션 바를 인쇄에서 숨김 */
+        }
+
+            @page {
+                size: A4 portrait;
+                margin: 10mm 0mm;  /* 상단 여백 10mm, 좌우 여백 0mm */
+            }
+            body {
+                font-family: Arial, sans-serif;
+                font-size: smaller; /* 글자 크기를 작게 설정 */
+                margin: 0;  /* 기본 margin 제거 */
+            }
+
+        .container { width: 100%; }
+            h7 { text-align: center; font-size: 0.7em; margin: 0; padding: 2mm 0; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
+            th, td {
+                border: 1px solid #ddd; /* 각 칼럼에 가는 선 테두리 */
+                padding: 5px;
+                text-align: center;
+                font-size: smaller;
+            }
+            th { background-color: #ffddee; }
+
+        .total-row td { border: none; font-weight: bold; }
+
+        .no-print { display: none; }
+            /* 머리글과 바닥글 제거 */
+            header, footer {
+                display: none;
+           }
+    }
+    </style>
+
+
+
+<style>
+    /* 테이블 전체에 적용 */
+    table {
+        width: 100%; /* 테이블 너비를 100%로 설정 (필요에 따라 조정) */
+        border-collapse: collapse; /* 테두리 간의 간격 제거 */
+    }
+
+    /* 각 셀(td)에 대한 스타일 */
+    td {
+        border: 1px solid #ddd; /* 가는 선을 적용 */
+        padding: 8px; /* 셀 내부 여백 설정 */
+        text-align: left; /* 텍스트 정렬 (필요에 따라 조정 가능) */
+    }
+
+    /* 각 행(tr)에 대한 스타일 (필요에 따라 추가 스타일링) */
+    tr {
+        border: 1px solid #ddd; /* 행의 테두리 설정 (선택 사항) */
+    }
+</style>
+
+설명:
+
+    border-collapse: collapse;는 테두리가 서로 붙도록 설정하는 옵션으로, 이 옵션을 사용하면 테두리가 중복되는 것을 방지하고, 선이 더 가늘고 깔끔하게 보입니다.
+    td에 border: 1px solid #ddd;를 추가하여 각 셀에 가느다란 선을 적용했습니다. 여기서 #ddd는 선의 색상을 지정하는 부분으로, 더 어두운 색으로 설정할 수도 있습니다.
+    padding: 8px;은 각 셀 내부의 내용과 테두리 사이의 여백을 설정합니다. 필요에 따라 이 값을 조정하여 셀의 크기를 변경할 수 있습니다.
+
+이 스타일은 모든 셀에 균일한 가느다란 선을 추가하며, 테이블이 깔끔하게 표시되도록 합니다.
