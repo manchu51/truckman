@@ -1,0 +1,63 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<br>
+<div class="container">
+    <h5 class="text-center">경비 수정</h5>
+    <form method="post" action="{{ url_for('cost.cost_modify', id=cost.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="cost_date">경비 일자:</label>
+            <input type="date" class="form-control" id="cost_date" name="cost_date" value="{{ cost.cost_date }}" required>
+        </div>
+        <div class="form-group">
+            <label for="cost_company">회사명:</label>
+            <input type="text" class="form-control" id="cost_company" name="cost_company" value="{{ cost.cost_company }}" required>
+        </div>
+        <div class="form-group">
+            <label for="cost_class">경비 형태:</label>
+                <select class="form-control" id="cost_class" name="cost_class">
+                    <option value="D" {% if cost.cost_class == 'D' %}selected{% endif %}>경유</option>
+                    <option value="G" {% if cost.cost_class == 'G' %}selected{% endif %}>휘발유</option>
+                    <option value="E" {% if cost.cost_class == 'E' %}selected{% endif %}>전기충전</option>
+                    <option value="T" {% if cost.cost_class == 'T' %}selected{% endif %}>차량관리</option>
+                    <option value="N" {% if cost.cost_class == 'N' %}selected{% endif %}>생필품</option>
+                    <option value="M" {% if cost.cost_class == 'M' %}selected{% endif %}>식대</option>
+                    <option value="F" {% if cost.cost_class == 'F' %}selected{% endif %}>면세품목</option>
+                    <option value="O" {% if cost.cost_class == 'O' %}selected{% endif %}>기타</option>
+                </select>
+        </div>
+
+        <div class="form-group">
+            <label for="statement">거래 내역:</label>
+            <input type="text" class="form-control" id="statement" name="statement" value="{{ cost.statement }}">
+        </div>
+        <div class="form-group">
+            <label for="payment">거래 방법:</label>
+                <select class="form-control" id="payment" name="payment">
+                    <option value="E" {% if cost.payment == 'E' %}selected{% endif %}>전자세금계산서</option>
+                    <option value="P" {% if cost.payment == 'P' %}selected{% endif %}>종이세금계산서</option>
+                    <option value="S" {% if cost.payment == 'S' %}selected{% endif %}>간이세금계산서</option>
+                    <option value="C" {% if cost.payment == 'C' %}selected{% endif %}>카드발급</option>
+                    <option value="R" {% if cost.payment == 'R' %}selected{% endif %}>간이영수증</option>
+                    <option value="M" {% if cost.payment == 'M' %}selected{% endif %}>현금영수증</option>
+                    <option value="O" {% if cost.payment == 'O' %}selected{% endif %}>기타</option>
+                </select>
+        </div>
+        <div class="form-group">
+            <label for="bank_card">카드 은행:</label>
+            <input type="text" class="form-control" id="bank_card" name="bank_card" value="{{ cost.bank_card }}" required>
+        </div>
+        <div class="form-group">
+            <label for="cost_amount">경비 금액:</label>
+            <input type="number" class="form-control" id="cost_amount" name="cost_amount" value="{{ cost.cost_amount }}" required>
+        </div>
+        <div class="form-group">
+            <label for="memo">비고:</label>
+            <input type=text class="form-control" id="memo" name="memo" value="{{ cost.memo }}">
+        </div>
+        <button type="submit" class="btn btn-primary">수정</button>
+    </form>
+</div>
+
+{% endblock %}

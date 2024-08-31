@@ -1,0 +1,144 @@
+﻿<head>
+    <meta charset="UTF-8">
+    <title>거래처 미수금 현황</title>
+
+    <style>
+        @media print {
+            .navbar {
+                display: none !important; /* 네비게이션 바를 인쇄에서 숨김 */
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 10mm 10mm;  /* 상단 여백 10mm, 좌우 여백 10mm */
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                font-size: smaller; /* 글자 크기를 작게 설정 */
+                margin: 0;  /* 기본 margin 제거 */
+            }
+
+            .container { width: 100%; }
+
+            h5 {
+                text-align: center;
+                font-size: 0.8em; /* 인쇄시 헤더 글자 크기 조정 */
+                margin: 0;
+                padding: 2mm 0;
+            }
+
+            table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
+            th, td {         /*    border: 1px solid #ddd;         각 칼럼에 가는 선 테두리 */
+                padding: 5px;
+                text-align: center;
+                font-size: smaller;
+            }
+            th { background-color: #ffddee; }
+            .total-row td { border: 1px solid #ddd; font-weight: bold; }
+            .no-print { display: none !important; /* 강제 적용 */}     /*<div class="no-print"> 적용 때문 */
+
+            /* 머리글과 바닥글 제거 */
+            header, footer {
+                display: none;
+            }
+        }
+
+        /* Additional styling for screen view */
+        body { font-family: Arial, sans-serif; }
+        .container { margin: 20px auto; width: 90%; }
+        h5 { text-align: center; font-size: 1em; } /* 글자 크기 동일하게 조정 */
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 1; }
+        th, td {
+            border: 1px solid #ddd; /* 화면에서도 같은 스타일 적용 */
+            padding: 8px;
+        }
+        th { background-color: #f2f2f2; text-align: center; }
+        .total-row td { font-weight: bold; }
+        .text-center { text-align: center; }
+        .small-text { font-size: smaller; }
+    </style>
+
+</head>
+<body>
+{% extends "base.html" %}
+{% block content %}
+<br><br>
+<div class="container">
+
+    <table style="width:100%" class="no-border">
+        <thead>
+        <tr class="no-border">
+            <td colspan="5" align="center" class="no-border">
+                <h5><strong>{{ trans_company }}&nbsp;&nbsp;&nbsp;&nbsp;미수금 현황</strong></h5>
+            </td>
+            <td colspan="2" align="right"class="no-border" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <h5><strong>오늘 날짜 : {{ today_date }}</strong></h5>
+            </td>
+        </tr>
+
+        <tr style="border: 1px solid #ddd;">
+            <th style="width:3%; text-align:center; border: 1px solid #ddd;">NO</th>
+            <th style="width:15%; text-align:center; border: 1px solid #ddd;">운송일자</th>
+            <th style="width:13%; text-align:center; border: 1px solid #ddd;">송하주</th>
+            <th style="width:23%; text-align:center; border: 1px solid #ddd;">상차지</th>
+            <th style="width:13%; text-align:center; border: 1px solid #ddd;">수하주</th>
+            <th style="width:23%; text-align:center; border: 1px solid #ddd;">하차지</th>
+            <th style="width:10%; text-align:center; border: 1px solid #ddd;">운송료</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% set ns = namespace(total_amount=0) %}
+        {% for idx, transport in enumerate(transports) %}
+        <tr style="border: 1px solid #ddd;">
+            <td style="text-align:center; border: 1px solid #ddd;">{{ loop.index }}</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ transport.trans_date }}</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ transport.consignor }}</td>
+            <td style="border: 1px solid #ddd;">{{ transport.load_region }}</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ transport.consignee }}</td>
+            <td style="border: 1px solid #ddd;">{{ transport.unload_region }}</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.trans_amount or 0) }}&nbsp;</td>
+            {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
+        </tr>
+        {% endfor %}
+
+        <tr class="total-row">
+            <td colspan="6" align="center">총 금액</td>
+             <td align="center">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;</td>
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <div class="no-print">
+        <table>
+            <tr>
+                <th>
+                    <button onclick="printContent()" class="btn btn-secondary">인쇄하기</button>
+                </th>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<!-- 스크립트는 페이지 하단에 포함 -->
+<script>
+    function printContent() {
+        const originalContent = document.body.innerHTML;  // 전체 페이지의 원본 내용을 저장합니다.
+        const printContent = document.querySelector('.container').outerHTML;  // 인쇄할 콘텐츠만 가져옵니다.
+
+        document.body.innerHTML = printContent;  // 인쇄할 콘텐츠로 페이지 내용을 교체합니다.
+        window.print();  // 인쇄 다이얼로그를 호출합니다.
+        setTimeout(() => {
+            document.body.innerHTML = originalContent;  // 페이지 내용을 원본으로 복구합니다.
+        }, 1000);  // 페이지 복구를 위해 약간의 지연을 추가합니다.
+    }
+</script>
+
+</body>
+
+{% endblock %}

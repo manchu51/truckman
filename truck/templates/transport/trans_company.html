@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .small-text {
+        font-size: 0.875em; /* 글자 크기를 조절할 수 있습니다.font-size: 0.875em; */
+    }
+</style>
+<br>
+<div class="container">
+    <h5 class="text-center">거래처 (미수금)운송현황</h5>
+
+   <form method="post" action="{{ url_for('transport.trans_company', view_type=view_type) }}">
+        {{ form.hidden_tag() }}
+        {% include "form_errors.html" %}
+
+        <div class="container-fluid">
+            <table style="width:100%" class="table table-bordered table-striped">
+                <tr bgcolor="#ffddee">
+                    <td style="width:15%" class="text-center"><label for="trans_company">운송 거래처:</label></td>
+                    <td style="width:15%" class="text-center">{{ form.trans_company(class="form-control") }}
+                    <td style="width:10%" class="text-center"><label for="start_date">시작 일자:</label></td>
+                    <td style="width:15%" class="text-center">{{ form.start_date(class="form-control") }}</td>
+                     <!--<td style="width:30%">&nbsp;</td>-->
+                    <td style="width:10%" class="text-center"><label for="end_date">마지막 일자:</label></td>
+                    <td style="width:15%" class="text-center">{{ form.end_date(class="form-control") }}</td>
+                </tr>
+            </table>
+        </div>
+        <div><button type="submit" class="btn btn-primary">{{ form.submit() }}</button></div>
+
+    </form>
+</div>
+
+<script>
+    document.getElementById('search-form').onsubmit = function() {
+        window.open('', 'search-results', 'width=800,height=600');
+    }
+</script>
+
+{% endblock %}
+

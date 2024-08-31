@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and Conditions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+</head>
+<body>
+<div class="container">
+    <h5><strong>이용 약관</strong></h5>
+    <p>여기에 이용 약관 내용을 작성하십시오.
+    이용자는 개인정보의 열람 청구를 아래의 부서에 할 수 있습니다. <br>
+        회사는 이용자의 개인정보 열람청구가 신속하게 처리되도록 노력하겠습니다.<br>
+이용자는 아래의 기관에 대해 개인정보 침해에 대한 피해구제, 상담 등을 문의하실 수 있습니다. <br>
+        <아래의 기관은 회사와는 별개의 기관으로서, 회사의 자체적인 개인정보 불만처리, <br>
+        피해구제 결과에 만족하지 못하시거나 보다 자세한 도움이 필요하시면 문의하여 주시기 바랍니다>
+
+
+
+
+    </p>
+    <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="termsAgree" required>
+            <label class="form-check-label" for="termsAgree">이용약관에 동의합니다</label>
+    </div>
+
+    <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">동의하고 회원 가입</a>
+</div>
+<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
+
+
+

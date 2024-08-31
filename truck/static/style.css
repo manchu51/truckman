@@ -1,0 +1,48 @@
+﻿/* Remove the arrows/spinners from number inputs */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .date-time-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+
+    .wide-input {
+        width: 100%;
+    }
+
+
+    .small-text {
+    font-size: smaller;
+    }
+
+/* truckman 전체 css 설정  */
+/* 예제 /templates/auth/terms.html
+
+ h1, h2, h3 {
+            color: #0056b3;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.2em;
+            margin-top: 15px;
+            margin-bottom: 12px;
+        }
+        h3 {
+            font-size: 1.0em;
+            margin-top: 12px;
+            margin-bottom: 10px;
+        }
+         */

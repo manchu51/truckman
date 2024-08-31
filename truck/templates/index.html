@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <!-- truckman CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Hello, truckman!</title>
+    <style>
+        .centered {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .welcome-text {
+            font-size: 2rem;
+            font-weight: bold;
+            font-color: 0064cd
+        }
+        .custom-table {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .custom-table td {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<br>
+
+<br>
+
+<div class="container">
+
+    <h5 align="left"><strong>트럭맨 웹사이트에 오신 여러분 환영합니다</strong></h5>
+    <br><br>
+    <form method="post" action="{{ url_for('auth.login') }}">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
+        <div class="mb-3">
+            <label for="username">회원 이름</label>
+            <input type="text" class="form-control" name="username" id="username"
+                   value="{{ form.username.data or '' }}">
+        </div>
+        <div class="mb-3">
+            <label for="password">비밀번호</label>
+            <input type="password" class="form-control" name="password" id="password"
+                   value="{{ form.password.data or '' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">로그인</button>
+    </form>
+</div>
+
+<br><br>
+
+<div class="container">
+    <h7 class="my-3 border-bottom pb-2">
+        <strong>처음 방문하시는 분은 아래 회원가입을 먼저 하여 주시기 바랍니다.</strong></h7>
+</div>
+
+<div class="container">
+    <a href="{{ url_for('auth.terms') }}">회원 가입</a>
+</div>
+<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

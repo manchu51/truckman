@@ -1,0 +1,356 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .small-text {
+        font-size: 0.875em;
+    }
+</style>
+<br>
+<div class="container">
+    <h5 class="text-center">기간별 경비 현황 결과</h5>
+    <br>
+    {% if costs %}
+
+    <table class="table table-bordered table-striped small-text">
+        <tbody>
+        <thead class="thead-dark">
+
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['D'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'D' %}
+
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['G'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'G' %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['E'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% set has_cost_class_e = false %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'E' %}
+            {% set has_cost_class_e = true %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+            <!-- cost_class가 'E'인 항목이 없을 경우의 처리 -->
+        {% if not has_cost_class_e %}
+            <tr>
+                <td colspan="8" class="text-center">해당 기간에 &nbsp;&nbsp;{{ cost_class_choices['E'] }}&nbsp;&nbsp;
+                    경비가 없습니다.</td>
+            </tr>
+        {% endif %}
+
+        </tr>
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['T'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'T' %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['N'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'N' %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['M'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'M' %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['F'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'F' %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+        <thead class="thead-dark">
+        <tr><td colspan="8" align="left">&nbsp;&nbsp;{{ cost_class_choices['O'] }}&nbsp;&nbsp; 지출 현황</td></tr>
+
+        <tr>
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:8%" class="text-center">경비 일자</th>
+            <th style="width:12%" class="text-center">회사명</th>
+            <th style="width:12%" class="text-center">거래 내역</th>
+            <th style="width:12%" class="text-center">지불 방법</th>
+            <th style="width:8%" class="text-center">카드 은행</th>
+            <th style="width:8%" class="text-center">경비 금액</th>
+            <th style="width:12%" class="text-center">비고</th>
+        </tr>
+        </thead>
+        {% set ns = namespace(num=0, total_cost = 0) %}
+        {% for idx, cost in enumerate(costs) %}
+            {% if cost.cost_class == 'O' %}
+            {% set ns.num = ns.num + 1 %}
+            <tr>
+                <td align="center">{{ ns.num }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+            <tr>
+                <td colspan="6" class="text-center">총금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td colspan="1"></td>
+            </tr>
+
+
+
+        <tr><td colspan="6" class="text-center">기간별 경비 전체 총금액</td>
+            <td align="right">{{ "{:,.0f}".format(total_cost_amount) }}&nbsp;&nbsp;&nbsp;</td>
+            <td colspan="1"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    {% else %}
+        <p class="text-center">검색 결과가 없습니다.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
