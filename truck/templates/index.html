@@ -8,40 +8,81 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
     <!-- truckman CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Hello, truckman!</title>
+
+    <title>트럭맨 - 희망의 길로</title>
+
     <style>
-        .centered {
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://example.com/path/to/your/hopeful-image.jpg'); /* 긍정적인 배경 이미지 */
+            background-size: cover;
+            background-position: center;
+            color: #333;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 80vh; /* 화면 전체 높이 */
+            margin: 0;
+        }
+        .intro-container {
             text-align: center;
+            margin-bottom: 20px;
         }
-        .welcome-text {
-            font-size: 2rem;
-            font-weight: bold;
-            font-color: 0064cd
+        h5 {
+            font-size: 18px; /* 폰트 크기 조정 */
         }
-        .custom-table {
-            background-color: #f8f9fa;
-            padding: 20px;
+        .truckman {
+            color: #87CEEB; /* 트럭맨에 하늘색 적용 */
+        }
+        .hope-path {
+            color: #FF6600; /* 희망의 길에 주황색 적용 */
+        }
+        .form-container {
+            background-color: rgba(240, 248, 255, 0.9); /* 연한 파란색 배경 */
+            padding: 30px;
             border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px; /* 가로 최대 크기 400 -> 600px로 증가 */
+            width: 100%;
         }
-        .custom-table td {
-            padding: 10px;
+        .form-container input {
+            font-size: 14px;
+            padding: 8px;
+        }
+        .btn-primary {
+            background-color: #87CEEB;
+            border-color: #87CEEB;
+        }
+        .container h6 {
+            font-size: 1.1rem; /* 글자 크기 조금 더 크게 */
+            margin-bottom: 20px;
+            text-align: left;     /* text-align: center; */
+           /* white-space: nowrap;  줄바꿈 방지 */
+        }
+        .signup-link {
+            color: #FF4500; /* 주황색으로 유도 */
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .signup-link:hover {
+            color: #FF6347; /* 호버 시 약간 더 밝은 색 */
+            font-size: 1.2rem;
         }
     </style>
 </head>
+
 <body>
-<br>
 
-<br>
+<div class="form-container">
+    <div class="intro-container">
+        <h5 align="left">
+            <strong>
+                <span class="truckman">트럭맨</span> 여러분 ! <br>
+                <span class="hope-path">희망의 길</span>로 여러분을 초대합니다.
+            </strong>
+        </h5>
+    </div>
 
-<div class="container">
-
-    <h5 align="left"><strong>트럭맨 웹사이트에 오신 여러분 환영합니다</strong></h5>
-    <br><br>
     <form method="post" action="{{ url_for('auth.login') }}">
         {{ form.csrf_token }}
         {% include "form_errors.html" %}
@@ -55,20 +96,18 @@
             <input type="password" class="form-control" name="password" id="password"
                    value="{{ form.password.data or '' }}">
         </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
+        <button type="submit" class="btn btn-primary w-100">로그인</button>
     </form>
+
+    <div class="container mt-4">
+        <h6><strong>처음 방문하시는 분은 아래 회원가입을 하여 주시기 바랍니다.</strong></h6>
+    </div>
+
+    <div class="container text-left">     <!-- text-center에서 text-left로 변경 -->
+        <a href="{{ url_for('auth.terms') }}" class="signup-link">회원 가입</a>
+    </div>
 </div>
 
-<br><br>
-
-<div class="container">
-    <h7 class="my-3 border-bottom pb-2">
-        <strong>처음 방문하시는 분은 아래 회원가입을 먼저 하여 주시기 바랍니다.</strong></h7>
-</div>
-
-<div class="container">
-    <a href="{{ url_for('auth.terms') }}">회원 가입</a>
-</div>
 <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

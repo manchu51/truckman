@@ -25,6 +25,7 @@ def create():
     form = CompanyForm()
     now_today = datetime.today().date()  # 오늘 날짜를 가져옵니다.
     today = datetime.today()
+
     if request.method == 'POST' and form.validate_on_submit():
         company = Company(register_date=form.register_date.data, company_class=form.company_class.data,
             business_no=form.business_no.data, firm=form.firm.data, president=form.president.data,

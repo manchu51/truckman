@@ -1,9 +1,8 @@
+import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
-import os
-import config
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -33,7 +32,7 @@ def page_not_found(e):
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(config)
+    app.config.from_envvar('APP_CONFIG_FILE')   #app.config.from_object(config)
 
     # ORM 초기화   # Initialize extensions
     db.init_app(app)
@@ -78,3 +77,6 @@ def create_app():
     app.register_error_handler(404, page_not_found)
 
     return app
+
+# 애플리케이션 객체 생성
+app = create_app()
