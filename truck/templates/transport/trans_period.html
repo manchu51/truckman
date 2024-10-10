@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block content %}
 
 <style>
@@ -11,9 +11,6 @@
 <div class="container">
     <h5 class="text-center">기간별 운송현황</h5>
     <form method="post" action="{{ url_for('transport.trans_period', view_type=view_type) }}">
-    <!--
-        <form method="post" action="{{ url_for('transport.trans_period') }}">
-    -->
         {{ form.hidden_tag() }}
         {% include "form_errors.html" %}
 

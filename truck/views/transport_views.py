@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 from flask import Blueprint, render_template, request, url_for, session, g, flash
 from werkzeug.utils import redirect
 from sqlalchemy import func
@@ -65,6 +65,12 @@ def create():
         else:                   # 조건을 만족하지 않으면 None으로 설정
             brokerage_date = None
 
+        # trans_type = '부가가치세용' 이라면
+        trans_type = request.form.get('trans_type')
+        if trans_type == 'V':
+            trans_set_date = trans_date,
+            brokerage_date = trans_date
+
         transport = Transport(
             trans_date=form.trans_date.data,
             trans_company=form.trans_company.data,
@@ -129,7 +135,8 @@ def trans_period():
             elif view_type == 'transport_set':  # 전체 미수금 입금 현황
                 transports = Transport.query.filter(
                     Transport.trans_date.between(start_date, end_date),
-                    Transport.trans_set_date.isnot(None)  # 입금일자가 있는 경우
+                    Transport.trans_set_date.isnot(None),  # 입금일자가 있는 경우
+                    Transport.trans_type == 'N'
                 ).order_by(Transport.trans_date.desc()).all()
 
             if not transports:
@@ -253,7 +260,8 @@ def trans_company():
                         Transport.trans_date >= start_date,
                         Transport.trans_date <= end_date,
                         Transport.terms == 'TF',
-                        Transport.trans_set_date.is_(None)  # 미수금인 경우 trans_set_date가 None
+                        Transport.trans_set_date.is_(None),  # 미수금인 경우 trans_set_date가 None
+                        Transport.trans_type == 'N'
                     ).order_by(Transport.trans_date.desc()).all()
 
                 elif view_type == 'company_set':          # 거래처 미수금 입금현황
@@ -380,7 +388,8 @@ def total_unpaid_print():
 
     ).filter(
         Transport.trans_date.between(start_date, end_date),
-        Transport.trans_set_date.is_(None)
+        Transport.trans_set_date.is_(None),
+        Transport.trans_type == 'N'
 
     ).group_by(
         Transport.trans_company, Transport.terms
@@ -390,13 +399,3 @@ def total_unpaid_print():
     # 결과를 렌더링할 템플릿으로 전달
     return render_template('transport/total_unpaid_print.html',
                  today_date=today_date, transports=filtered_transports)
-
-
-"""
-Transport.consignor,
-        Transport.consignee,
-).group_by(
-        Transport.consignor, Transport.terms
-    ).group_by(
-        Transport.consignee, Transport.terms       
-"""

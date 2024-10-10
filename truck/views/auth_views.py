@@ -14,7 +14,6 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/terms', methods=['GET'])
 def terms():
-    #return render_template('terms.html')
     return render_template('auth/terms.html')
 
 

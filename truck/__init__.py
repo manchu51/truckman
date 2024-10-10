@@ -78,3 +78,6 @@ def create_app():
     app.register_error_handler(404, page_not_found)
 
     return app
+
+ # 애플리케이션 객체 생성
+app = create_app()
