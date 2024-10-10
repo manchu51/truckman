@@ -1,11 +1,14 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-<br>
-<div class="container">
-    <h5 class="text-center">업체 현황</h5>
-    <table class="table table-bordered table-striped">
-        <thead>
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">기간별 &nbsp;&nbsp;&nbsp;&nbsp; 업체현황</h5>
+        {% if companies %}
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+            <thead class="head-dark">
             <tr>
                 <th style="width:3%" class="text-center">NO</th>
                 <th style="width:8%" class="text-center">등록일</th>
@@ -19,12 +22,10 @@
                 <th style="width:6%" class="text-center">수정</th>
                 <th style="width:6%" class="text-center">삭제</th>
             </tr>
-        </thead>
-        <tbody>
-
-            {% for idx, company in enumerate(companies) %}
+            </thead>
+            <tbody>
+                {% for idx, company in enumerate(companies) %}
             <tr>
-
                 <td>{{ idx + 1 }}</td>
                 <td class="text-center">{{ company.register_date }}</td>
                 <td class="text-center">{{ company_class_choices[company.company_class] }}</td>
@@ -37,9 +38,16 @@
                 <td class="text-center"><a href="{{ url_for('company.modify_company', company_id=company.id) }}" class="btn btn-warning">수정</a></td>
                 <td class="text-center"><a href="{{ url_for('company.delete_company', company_id=company.id) }}" class="btn btn-danger">삭제</a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+            <p class="text-center">검색 결과가 없습니다.</p>
+        {% endif %}
+
+    </div>
 </div>
+
 {% endblock %}
 

@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title>거래처 미수금 현황</title>
+    <title>운송료 총미수금 현황</title>
 
     <!--
     CSS에서의 한계:
@@ -11,30 +11,74 @@
     모든 브라우저에서 동일한 결과를 얻을 수 있습니다.
     -->
 
-    <style>
-        .no-print {
-            display: none !important; /* 강제 적용 */
+<style>
+     .no-print {
+        display: none !important; /* 강제 적용 Forcefully hide elements during print */
+     }
+
+     /* 추가적인 스타일 설정           Optimize for print */
+     @media print {
+        .navbar {
+            display: none !important; /* 네비게이션 바를 인쇄에서 숨김 */
+            visibility: hidden;        /* Ensure it remains invisible */
         }
 
-        /* 추가적인 스타일 설정 */
-        @media print {
-            .navbar {
-                display: none !important; /* 네비게이션 바를 인쇄에서 숨김 */
-            }
+        .bottom {
+            display: none !important; /* bottom.html 를 인쇄에서 숨김 */
+            visibility: hidden;        /* Ensure it remains invisible */
+        }
 
-            @page {
-                size: A4;
-                margin: 10mm; /* 모든 방향의 여백을 10mm로 설정 */
-            }
+        @page {
+            size: A4;
+            margin: 25mm 10mm; /* 상단/하단 25mm, 왼쪽/오른쪽 10mm 여백 */
+        }
 
-            body {
-                font-family: Arial, sans-serif;
-                font-size: smaller; /* 글자 크기를 작게 설정 */
-                margin: 0; /* 기본 margin 제거 */
-                padding: 10mm; /* A4 용지의 상단, 하단, 왼쪽, 오른쪽 여백을 각각 10mm로 설정 */
-            }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 0.75em;     /* Smaller font size for print */
+            margin: 10px;          /* margin: 0;  기본 margin 제거 */
+            padding: 10px;         /* padding: 0;  인쇄 여백 설정과 충돌을 피하기 위해 패딩 제거 */
+            line-height: 1.4;
+        }
 
-            .container { width: 100%; }
+        h1 {
+            font-size: 1.4em; /* Slightly reduced size */
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1em;
+            margin-top: 8px;
+            margin-bottom: 5px;
+        }
+
+        /* Hide navigation and non-print elements */
+        .no-print {
+            display: none;
+        }
+
+        /* Avoid page breaks within critical content */
+        .avoid-break {
+            page-break-inside: avoid;
+        }
+
+        /* Prevent page breaks inside these elements */
+        .no-page-break {
+            page-break-inside: avoid;
+        }
+
+        /* Optional: Force page breaks before/after specific elements */
+        .page-break {
+            page-break-before: always;  /* Forces a page break before the element */
+        }
+
+        .container { width: 100%; }
             h6 { text-align: center; font-size: 0.7em; margin: 0; padding: 2mm 0; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
             th, td {
@@ -45,53 +89,58 @@
             }
             th { background-color: #ffddee; }
 
-            .total-row td { border: none; font-weight: bold; }
+        .total-row td { border: none; font-weight: bold; }
 
-            /* 머리글과 바닥글 제거 */
-            header, footer {
-                display: none;
-            }
+        /* 머리글과 바닥글 제거 */
+        header, footer {
+            display: none;
         }
-    </style>
+    }
+</style>
 
-    <script>
-        window.onload = function() {
-            window.print();
-        }
-    </script>
+<script>
+    window.onload = function() {
+           window.print();
+    }
+
+    window.onafterprint = function() {
+        document.querySelector('.navbar').style.display = '';
+    };
+</script>
 
 </head>
 <body>
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
-
     <table style="width:100%">
         <thead>
         <tr>
-            <td colspan="5" align="center">
+            <td colspan="4" align="center">
                 <h6><strong>{{ trans_company }}&nbsp;&nbsp;&nbsp;&nbsp;총미수금 현황</strong></h6>
             </td>
-            <td colspan="2" align="center">&nbsp;&nbsp;
-                <h6><strong>오늘 날짜 : {{ today_date }}</strong></h6>
+            <td colspan="3" align="right">&nbsp;&nbsp;
+                <h6><strong>오늘 날짜 : {{ today_date }}</strong>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong>페이지: &nbsp;&nbsp; {{ page }}&nbsp;&nbsp;/&nbsp;&nbsp;{{ total_pages }}</strong></h6> <!-- 페이지 정보 추가 -->
             </td>
         </tr>
-
         <tr style="border: 1px solid #ddd;">
             <th style="width:5%; text-align:center; border: 1px solid #ddd;">NO</th>
-            <th style="width:15%; text-align:center; border: 1px solid #ddd;">운송일자</th>
-            <th style="width:20%; text-align:center; border: 1px solid #ddd;">회사명</th>
-            <th style="width:10%; text-align:center; border: 1px solid #ddd;">건수</th>
+            <th style="width:12%; text-align:center; border: 1px solid #ddd;">운송일자</th>
+            <th style="width:15%; text-align:center; border: 1px solid #ddd;">회사명</th>
+            <th style="width:8%; text-align:center; border: 1px solid #ddd;">건수</th>
             <th style="width:20%; text-align:center; border: 1px solid #ddd;">상차지</th>
-            <th style="width:20%; text-align:center; border: 1px solid #ddd;">하차지</th>
-            <th style="width:10%; text-align:center; border: 1px solid #ddd;">운송료</th>
+            <th style="width:8%; text-align:center; border: 1px solid #ddd;">운송료</th>
+            <th style="width:8%; text-align:center; border: 1px solid #ddd;">수수료</th>
         </tr>
         </thead>
+
         <tbody>
-        {% set ns = namespace(G_total_amount=0, total_count=0) %}
+        {% set ns = namespace(G_total_amount=0, G_total_fee=0, total_count=0) %}
         {% for transport in transports %}
             {% if transport.terms == "TF" %}
+
         <tr style="border: 1px solid #ddd;">
             <td style="text-align:center; border: 1px solid #ddd;">{{ loop.index }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.trans_date }}</td>
@@ -99,9 +148,10 @@
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.count }}</td>
             {% set ns.total_count = ns.total_count + (transport.count) %}
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
-            <td style="text-align:left border: 1px solid #ddd;">{{ transport.unload_region }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_amount) }}</td>
             {% set ns.G_total_amount = ns.G_total_amount + (transport.total_amount) %}
+            <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_fee) }}</td>
+            {% set ns.G_total_fee = ns.G_total_fee + (transport.total_fee) %}
         </tr>
 
             {% elif transport.terms == "CF" %}
@@ -112,9 +162,10 @@
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.count }}</td>
             {% set ns.total_count = ns.total_count + (transport.count) %}
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
-            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.unload_region }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_amount) }}</td>
             {% set ns.G_total_amount = ns.G_total_amount + (transport.total_amount) %}
+            <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_fee) }}</td>
+            {% set ns.G_total_fee = ns.G_total_fee + (transport.total_fee) %}
         </tr>
 
 
@@ -129,23 +180,25 @@
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.unload_region }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_amount) }}</td>
             {% set ns.G_total_amount = ns.G_total_amount + (transport.total_amount) %}
+            <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_fee) }}</td>
+            {% set ns.G_total_fee = ns.G_total_fee + (transport.total_fee) %}
         </tr>
             {% endif %}
 
         {% endfor %}
 
         <tr class="total-row" style="border: 1px solid #ddd;">
-            <td colspan="3" align="center">총 건수</td>
+            <td colspan="3" align="center">총 &nbsp;&nbsp; 건수</td>
             <td align="center">{{ "{:,.0f}".format(ns.total_count) }}</td>
-            <td>&nbsp;</td>
-            <td colspan="1" align="center">총 금액</td>
+            <td colspan="1" align="center">총 &nbsp;&nbsp; 운송료/수수료</td>
             <td align="center">{{ "{:,.0f}".format(ns.G_total_amount) }}&nbsp;&nbsp;</td>
+            <td align="center">{{ "{:,.0f}".format(ns.G_total_fee) }}</td>
         </tr>
 
         </tbody>
 
     </table>
 
-</body>
-
 {% endblock %}
+
+</body>

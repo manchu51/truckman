@@ -1,16 +1,19 @@
 ﻿{% extends 'base.html' %}
 {% block content %}
+
 <!-- 질문 등록 -->
-<div class="container">
-    <h5 class="my-3 border-bottom pb-2">우리의 관심사를 등록해 봅시다</h5>
-     <form method="post" class="my-3">
+<div class="container my-3" style="max-width: 70%;">
+    <div class="scrollable-table-container">
+
+    <h5 class="my-3 border-bottom pb-2">
+        <strong>우리의 <font cont color="#CD426B;">
+            관심사</font>를 등록해 봅시다</strong></h5>
+    <form method="post" class="my-3">
          {{ form.csrf_token }}
 
-
-        <!-- 오류표시 Start -->
-
-        {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
+         <!-- 오류표시 Start -->
+         {% if form.errors %}
+         <div class="alert alert-danger" role="alert">
             {% for field, errors in form.errors.items() %}
             <strong>{{ form[field].label }}</strong>
             <ul>
@@ -20,30 +23,29 @@
             </ul>
             {% endfor %}
          </div>
-
-        {% endif %}
-
-        <!-- 오류표시 End -->
-
-
-
-
+         {% endif %}
+         <!-- 오류표시 End -->
 
          <!-- 수작업으로 폼 작성하기 -->
-
-          <div class="mb-3">
-            <label for="subject">제목</label>
-            <input type="text" class="form-control" name="subject" id="subject"
-                   value="{{ form.subject.data or '' }}" >
-        </div>
-        <div class="mb-3">
-            <label for="content">내용</label>
-            <textarea class="form-control" name="content" id="content" rows="10">
+         <div class="mb-3">
+              <label for="subject"><h5>제목</h5></label>
+              <input type="text" class="form-control" name="subject" id="subject"
+                      style="background-color: #F0FFF0;"
+                          value="{{ form.subject.data or '' }}" autofocus>
+         </div>
+         <div class="mb-3">
+              <label for="content"><h5>내용</h5></label>
+              <textarea style="background-color: #E6FFE6;" class="form-control"
+                        name="content" id="content" rows="10">
                         {{ form.content.data or '' }}
-            </textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">저장하기</button>
+              </textarea>
+         </div>
+
+         <button type="submit" class="btn btn-primary">등록하기</button>
 
     </form>
+
+    </div>
 </div>
+
 {% endblock %}

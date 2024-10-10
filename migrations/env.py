@@ -1,9 +1,12 @@
 import logging
+from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-
 from flask import current_app
-
 from alembic import context
+import os
+
+# If using Flask's app context, import the app and load the config
+from flask import current_app
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -13,6 +16,16 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
+
+
+# Set up the Flask app's context and database URI
+def get_database_url():
+    # Assuming that Flask app is set up to load configurations from config module
+    return current_app.config.get('SQLALCHEMY_DATABASE_URI')
+
+
+# Add the rest of the standard Alembic `env.py` code
+target_metadata = current_app.extensions['migrate'].db.metadata
 
 
 def get_engine():
@@ -51,6 +64,22 @@ def get_metadata():
     return target_db.metadata
 
 
+def run_migrations_online():
+    # This will be the same as the default Alembic template
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix='sqlalchemy.',
+        poolclass=pool.NullPool,
+    )
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+        )
+        with context.begin_transaction():
+            context.run_migrations()
+
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -71,8 +100,6 @@ def run_migrations_offline():
     with context.begin_transaction():
         context.run_migrations()
 
-
-def run_migrations_online():
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine

@@ -1,44 +1,20 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-
-<style>
-    /* Remove the arrows/spinners from number inputs */
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
-
-    .date-time-container {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-
-    .wide-input {
-        width: 100%;
-    }
-
-</style>
-
 <span style="margin-left: 20px;" id="current_datetime"></span>
 
 <form method="post">
-{{ form.csrf_token }}
-{% include "form_errors.html" %}
+    {{ form.csrf_token }}
+    {% include "form_errors.html" %}
 
 <div class="container-fluid">
-    <table style="width:100%" class="table table-bordered table-striped">
-        <thead class="thead-dark">
+    <div class="scrollable-table-container">
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+
+        <thead class="head-dark">
         <tr bgcolor="#ffddee">
             <th colspan="6" class="text-center"><h6><strong>경비 입력</strong></h6></th>
-            <th colspan="3" class="text-center"><h6><strong>오늘 날짜 :
+            <th colspan="3" class="text-center"><h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 :
                 {{ today|datetime('%Y-%m-%d') }} 시각 : {{ today|datetime('%H:%M:%S %p') }}
                         </strong></h6></th>
         </tr>
@@ -56,7 +32,7 @@
         </tr>
         </thead>
 
-       <tr style="width:100%" bgcolor="#ffffdd">
+        <tr style="width:100%" bgcolor="#ffffdd">
             <td align="center">{{ count }}1</td>
             <td><input type="date" class="form-control" id="cost_date" name="cost_date" placeholder="yyyy-mm-dd" style="width: 160px;" required></td>
             <td><input type="text" class="form-control" id="cost_company" name="cost_company"></td>
@@ -88,9 +64,9 @@
            <td><input type="number" class="form-control" id="cost_amount" name="cost_amount"
                       min="0" max="10000000" step="1" required></td>
            <td><input type="text" class="form-control" id="memo" name="memo"></td>
-       </tr>
+        </tr>
 
-       <tr>
+        <tr>
             <td colspan="3" align="left">
                 <button type="submit" class="btn btn-primary">경비 입력</button>
             </td>
@@ -99,9 +75,9 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;경비 현황</strong></h6>
             </td>
             <td colspan="1" align="center">&nbsp;</td>
-       </tr>
+        </tr>
 
-       {% if costs %}
+            {% if costs %}
             {% for idx, cost in enumerate(costs) %}
         <tr>
             <td align="center">{{ idx + 1 }}</td>
@@ -117,7 +93,8 @@
             {% endfor %}
         {% endif %}
 
-    </table>
+        </table>
+    </div>
 </div>
 </form>
 

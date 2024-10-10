@@ -1,85 +1,81 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-<style>
-    .small-text {
-          font-size: 0.775em;   /* 글자 크기를 조절할 수 있습니다. font-size: 0.875em; */
-     }
-</style>
+<span style="margin-left: 20px;" id="current_datetime"></span>
 
-<br>
-<div class="container">
-    <h6 align="center" class="text-center">기간별 운송현황</h6>
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">기간별 &nbsp;&nbsp;&nbsp;&nbsp; 운송현황</h5>
+        {% if transports %}
 
-    {% if transports %}
-    <table class="table table-bordered table-striped small-text"><!-- border="1"-->
-        <thead class="thead-dark">
-        <tr>
-            <th style="width:3%" class="text-center">NO</th>
-            <th style="width:7.5%" class="text-center">운송 일자</th>
-            <th style="width:11%" class="text-center">회사명</th>
-            <th style="width:11%" class="text-center">송하주</th>
-            <th style="width:16%" class="text-center">상차지</th>
-            <!--<th style="width:7.5%" class="text-center">하차 일자</th>-->
-            <th style="width:11%" class="text-center">수하주</th>
-            <!--<th style="width:16%" class="text-center">하차지</th>-->
-            <th style="width:9%" class="text-center">거래 조건</th>
-            <th style="width:7%" class="text-center">운송료</th>
-            <th style="width:7%" class="text-center">운송 수수료</th>
-            <th style="width:7.5%" class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;운송료 &nbsp;&nbsp;&nbsp;&nbsp; 입금일자&nbsp;</th>
-            <th style="width:5%" class="text-center">수정</th>
-            <th style="width:5%" class="text-center">삭제</th>
-            <!--<th style="width:8%" class="text-center">비고</th>-->
-        </tr>
-        </thead>
-        <tbody>
-            {% set ns = namespace(total_amount=0, total_fee=0) %}
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+            <thead class="head-dark">
+            <tr bgcolor="#ffddee">
+                <th style="width:3%" class="text-center">NO</th>
+                <th style="width:8%" class="text-center">운송일자</th>
+                <th style="width:10%" class="text-center">회사명</th>
+                <th style="width:10%" class="text-center">송하주</th>
+                <th style="width:15%" class="text-center">상차지</th>
+                <th style="width:10%" class="text-center">수하주</th>
+                <th style="width:8%" class="text-center">거래 조건</th>
+                <th style="width:7%" class="text-center">운송료</th>
+                <th style="width:7%" class="text-center">수수료</th>
+                <th style="width:8%" class="text-center">입금일자</th>
+                <th style="width:7%" class="text-center">수정</th>
+                <th style="width:7%" class="text-center">삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% set ns = namespace(total_amount=0, total_fee=0) %}
+                {% for idx, transport in enumerate(transports) %}
+            <tr>
+                <td align="center">{{ idx + 1 }}</td>
+                <td align="center">{{ transport.trans_date }}</td>
+                <td>{{ transport.trans_company }}</td>
+                <td>{{ transport.consignor }}</td>
+                <td>{{ transport.load_region }}</td>
+                <td>{{ transport.consignee }}</td>
+                <td class="text-center">{{ terms_choices[transport.terms] }}</td>
+                <td align="right">
+                    {% if transport.trans_amount is not none %}
+                        {{ "{:,.0f}".format(transport.trans_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% else %}
+                        0&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% endif %}
+                </td>
+                {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
+                <td align="right">
+                    {% if transport.brokerage_fee is not none %}
+                        {{ "{:,.0f}".format(transport.brokerage_fee) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% else %}
+                        0&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% endif %}
+                </td>
+                {% set ns.total_fee = ns.total_fee + (transport.brokerage_fee or 0) %}
+                <td align="center">{{ transport.trans_set_date }}</td>
+                <td align="center">
+                        <a href="{{ url_for('transport.trans_modify', id=transport.id) }}"
+                                      class="btn btn-warning btn-sm">수정</a></td>
+                <td align="center">
+                        <a href="{{ url_for('transport.trans_delete', id=transport.id) }}"
+                                      class="btn btn-danger btn-sm">삭제</a></td>
+            </tr>
+                {% endfor %}
+            <!-- <tr><td colspan="12">&nbsp;</td></tr> -->
+            <tr>
+                <td colspan="7" align="center">총 금액</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td align="right">{{ "{:,.0f}".format(ns.total_fee) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td colspan="3">&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
 
-            {% for idx, transport in enumerate(transports) %}
-        <tr>
-            <td align="center">{{ idx + 1 }}</td>
-            <td align="center">{{ transport.trans_date }}</td>
-            <td>{{ transport.trans_company }}</td>
-            <td>{{ transport.consignor }}</td>
-            <td>{{ transport.load_region }}</td>
-            <!--<td class="text-center">{{ transport.unload_date }}</td>-->
-            <td>{{ transport.consignee }}</td>
-            <!--<td>{{ transport.unload_region }}</td>-->
-            <td class="text-center">{{ terms_choices[transport.terms] }}</td>
-            <td align="right">
-                {% if transport.trans_amount is not none %}
-                    {{ "{:,.0f}".format(transport.trans_amount) }}&nbsp;&nbsp;
-                {% else %}
-                    0&nbsp;&nbsp;
-                {% endif %}
-            </td>
-            {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
-            <td align="right">
-                {% if transport.brokerage_fee is not none %}
-                    {{ "{:,.0f}".format(transport.brokerage_fee) }}&nbsp;&nbsp;
-                {% else %}
-                    0&nbsp;&nbsp;
-                {% endif %}
-            </td>
-            {% set ns.total_fee = ns.total_fee + (transport.brokerage_fee or 0) %}
-            <td align="center">{{ transport.trans_set_date }}</td>
-            <td align="center"><a href="{{ url_for('transport.trans_modify', id=transport.id) }}" class="btn btn-warning btn-sm">수정</a></td>
-            <td align="center"><a href="{{ url_for('transport.trans_delete', id=transport.id) }}" class="btn btn-danger btn-sm">삭제</a></td>
-        </tr>
-            {% endfor %}
-        <tr><td colspan="12">&nbsp;</td></tr>
-        <tr>
-            <td colspan="7" align="center">총 금액</td>
-            <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;</td> <!-- 총 금액도 천 단위로 표시 -->
-            <td align="right">{{ "{:,.0f}".format(ns.total_fee) }}&nbsp;&nbsp;</td> <!-- 총 금액도 천 단위로 표시 -->
-            <td colspan="3">&nbsp;</td>
-        </tr>
-        </tbody>
-    </table>
+        {% else %}
+            <p class="text-center">검색 결과가 없습니다.</p>
+        {% endif %}
 
-    {% else %}
-        <p class="text-center">검색 결과가 없습니다.</p>
-    {% endif %}
+    </div>
 </div>
 
 {% endblock %}

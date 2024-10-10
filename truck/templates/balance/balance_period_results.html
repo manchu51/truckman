@@ -22,108 +22,120 @@
         border: 1px solid black;
     }
 </style>
-<br>
-<div class="container">
-    <h5 class="text-center">기간별 매출/매입 현황</h5>
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
 
     {% if grouped_data %}
     <table class="table table-bordered table-striped small-text" style="width:100%">
+        <thead class="head-dark">
+        <tr>
+            <td colspan="8" align="center">
+                    <strong>기간별 &nbsp;&nbsp;&nbsp;&nbsp; 매출/매입 자료</strong>
+            </td>
+            <td colspan="5" align="right" valign="middle">
+                <h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 :
+                {{ today.strftime('%Y-%m-%d') }} 시각 : {{ today.strftime('%H:%M:%S %p') }}
+                &nbsp;&nbsp;</strong></h6>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="8" class="text-center" style="background-color: #e0f7ff;">매출</th>
+            <th colspan="5" class="text-center" style="background-color: #ffffe0;">매입</th>
+        </tr>
+        <tr>
+            <th style="background-color: #e0f7ff; width:3%" class="text-center">NO</th>
+            <th style="background-color: #e0f7ff; width:6%" class="text-center">운송일자</th>
+            <th style="background-color: #e0f7ff; width:9%" class="text-center">회사명</th>
+            <th style="background-color: #e0f7ff; width:9%" class="text-center">송하주</th>
+            <th style="background-color: #e0f7ff; width:14%" class="text-center">상차지</th>
+            <th style="background-color: #e0f7ff; width:9%" class="text-center">수하주</th>
+            <th style="background-color: #e0f7ff; width:5%" class="text-center">운송료</th>
+            <th style="background-color: #e0f7ff; width:5%" class="text-center">수수료</th>
 
-        <thead class="thead-dark">
-            <tr border="1">
-                <th colspan="8" class="text-center" style="background-color: #e0f7ff;">매출</th>
-                <th colspan="5" class="text-center" style="background-color: #ffffe0;">매입</th>
-            </tr>
-            <tr>
-                <th style="background-color: #e0f7ff; width:3%" class="text-center">NO</th>
-                <th style="background-color: #e0f7ff; width:6%" class="text-center">운송일자</th>
-                <th style="background-color: #e0f7ff; width:9%" class="text-center">회사명</th>
-                <th style="background-color: #e0f7ff; width:9%" class="text-center">송하주</th>
-                <th style="background-color: #e0f7ff; width:14%" class="text-center">상차지</th>
-                <th style="background-color: #e0f7ff; width:9%" class="text-center">수하주</th>
-                <th style="background-color: #e0f7ff; width:5%" class="text-center">운송료</th>
-                <th style="background-color: #e0f7ff; width:5%" class="text-center">수수료</th>
-
-                <th style="background-color: #ffffe0; width:6%" class="text-center light-yellow">경비일자</th>
-                <th style="background-color: #ffffe0; width:10%" class="text-center light-yellow">회사명</th>
-                <th style="background-color: #ffffe0; width:6%" class="text-center light-yellow">경비 형태</th>
-                <!--<th style="background-color: #ffffe0; width:8%" class="text-center light-yellow">거래내역</th>-->
-                <th style="background-color: #ffffe0; width:6%" class="text-center light-yellow">거래방법</th>
-                <th style="background-color: #ffffe0; width:5%" class="text-center light-yellow">금액</th>
-            </tr>
+            <th style="background-color: #ffffe0; width:6%" class="text-center light-yellow">경비일자</th>
+            <th style="background-color: #ffffe0; width:10%" class="text-center light-yellow">회사명</th>
+            <th style="background-color: #ffffe0; width:6%" class="text-center light-yellow">경비 형태</th>
+            <!--<th style="background-color: #ffffe0; width:8%" class="text-center light-yellow">거래내역</th>-->
+            <th style="background-color: #ffffe0; width:6%" class="text-center light-yellow">거래방법</th>
+            <th style="background-color: #ffffe0; width:5%" class="text-center light-yellow">금액</th>
+        </tr>
         </thead>
         <tbody>
-
             {% set ns = namespace(total_amount=0, total_fee=0, total_cost=0, j=0) %}
 
             {% for date in sorted_dates %}
                 {% set transports = grouped_data[date]['transports'] %}
                 {% set costs = grouped_data[date]['costs'] %}
                 {% for i in range(max(transports|length, costs|length)) %}
+        <tr>
+            {% set ns.j = ns.j + 1 %}
 
-            <tr>
-                {% set ns.j = ns.j + 1 %}
-                <td align="center">{{ ns.j }}</td>
-
-
+            <td align="center">{{ ns.j }}</td>
                 {% if i < transports|length %}
                 {% set transport = transports[i] %}
-                <td align="center">{{ transport.trans_date }}</td>
-                <td>{{ transport.trans_company }}</td>
-                <td>{{ transport.consignor }}</td>
-                <td>{{ transport.load_region }}</td>
-                <td>{{ transport.consignee }}</td>
-                <td align="right">
-                    {{ "{:,.0f}".format(transport.trans_amount) if transport.trans_amount is not none else '0' }}&nbsp;&nbsp;
-                </td>
+            <td align="center">{{ transport.trans_date }}</td>
+            <td>{{ transport.trans_company }}</td>
+            <td>{{ transport.consignor }}</td>
+            <td>{{ transport.load_region }}</td>
+            <td>{{ transport.consignee }}</td>
+            <td align="right">
+                {{ "{:,.0f}".format(transport.trans_amount)
+                    if transport.trans_amount is not none else '0' }}&nbsp;&nbsp;
+            </td>
                 {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
-                <td align="right">
-                    {{ "{:,.0f}".format(transport.brokerage_fee) if transport.brokerage_fee is not none else '0' }}&nbsp;&nbsp;
-                </td>
+            <td align="right">
+                {{ "{:,.0f}".format(transport.brokerage_fee)
+                    if transport.brokerage_fee is not none else '0' }}&nbsp;&nbsp;
+            </td>
                 {% set ns.total_fee = ns.total_fee + (transport.brokerage_fee or 0) %}
-
                 {% else %}
-
-                <td colspan="7">&nbsp;</td>
+            <td colspan="7">&nbsp;</td>
                 {% endif %}
 
                 {% if i < costs|length %}
                 {% set cost = costs[i] %}
-                <td align="center" class="light-yellow">{{ cost.cost_date }}</td>
-                <td align="center" class="light-yellow">{{ cost.cost_company }}</td>
-                <td align="center" class="light-yellow">{{ cost_class_choices[cost.cost_class] }}</td>
-                <!--<td align="center" class="light-yellow">{{ cost.statement }}</td>-->
-                <td align="center" class="light-yellow">{{ payment_choices[cost.payment] }}</td>
-                <td align="right" class="light-yellow">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;</td>
+            <td align="center" class="light-yellow">{{ cost.cost_date }}</td>
+            <td align="center" class="light-yellow">{{ cost.cost_company }}</td>
+            <td align="center" class="light-yellow">{{ cost_class_choices[cost.cost_class] }}</td>
+            <!--<td align="center" class="light-yellow">{{ cost.statement }}</td>-->
+            <td align="center" class="light-yellow">{{ payment_choices[cost.payment] }}</td>
+            <td align="right" class="light-yellow">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;</td>
                 {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
                 {% else %}
 
-                <td colspan="6" class="light-yellow">&nbsp;</td>
+            <td colspan="6" class="light-yellow">&nbsp;</td>
                 {% endif %}
-            </tr>
+        </tr>
                 {% endfor %}
             {% endfor %}
 
-            <tr>
-                <td colspan="6" align="center">총 금액</td>
-                <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;</td>
-                <td align="right">{{ "{:,.0f}".format(ns.total_fee) }}&nbsp;&nbsp;</td>
-                <td colspan="4" class="light-yellow">&nbsp;</td>
-                <td align="right" class="light-yellow">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="8" align="center">
-                    손익 계산 총 매출: {{ "{:,.0f}".format(ns.total_amount) }} - 총 수수료: {{ "{:,.0f}".format(ns.total_fee) }} - 총 매입: {{ "{:,.0f}".format(ns.total_cost) }} =
+        <tr>
+            <td colspan="6" align="center">총 금액</td>
+            <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;</td>
+            <td align="right">{{ "{:,.0f}".format(ns.total_fee) }}&nbsp;&nbsp;</td>
+            <td colspan="4" class="light-yellow">&nbsp;</td>
+            <td align="right" class="light-yellow">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="8" align="center">
+                손익 계산 총 매출: {{ "{:,.0f}".format(ns.total_amount) }} - 총 수수료:
+                    {{ "{:,.0f}".format(ns.total_fee) }} - 총 매입:
+                    {{ "{:,.0f}".format(ns.total_cost) }} =
                     {{ "{:,.0f}".format(ns.total_amount - ns.total_fee - ns.total_cost) }}
-                </td>
-                <td colspan="5" align="center">요약 정리 인쇄</td>
-            </tr>
+            </td>
+            <td colspan="5" align="center">요약 정리 인쇄</td>
+        </tr>
         </tbody>
     </table>
 
     {% else %}
         <p class="text-center">검색 결과가 없습니다.</p>
     {% endif %}
+
+    </div>
 </div>
 
 {% endblock %}

@@ -1,21 +1,24 @@
 ﻿<head>
     <meta charset="UTF-8">
-    <title>거래처 총미수금 현황</title>
+    <title>운송료 총미수금 현황</title>
 </head>
+
 <body>
 {% extends "base.html" %}
 {% block content %}
-<br>
-<div class="container">
-    {% if transports %}
 
-    <table class="table table-bordered table-striped small-text"  style="width:100%">
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+
+    {% if transports %}
+    <table class="table table-bordered table-striped small-text">
         <thead class="thead-dark">
         <tr>
-            <td colspan="6" align="center"><h5>기간별 총미수금 현황</h5></td>
-            <td colspan="4" align="center"><h5>오늘 날짜 : {{ today_date }}</h5></td>
+            <td colspan="7" align="center"><h5>기간별 총미수금 현황</h5></td>
+            <td colspan="3" align="center"><h5>오늘 날짜 : {{ today_date }}</h5></td>
         </tr>
-
         <tr>
             <th style="width:3%" class="text-center">NO</th>
             <th style="width:8%" class="text-center">운송 일자</th>
@@ -33,7 +36,6 @@
         <tbody>
             {% set ns = namespace(total_amount=0, total_fee=0) %}
             {% for idx, transport in enumerate(transports) %}
-
         <tr>
             <td align="center">{{ idx + 1 }}</td>
             <td align="center">{{ transport.trans_date }}</td>
@@ -43,7 +45,6 @@
             <td>{{ transport.consignee }}</td>
             <td>{{ transport.unload_region }}</td>
             <td class="text-center">{{ terms_choices[transport.terms] }}</td>
-
             <td align="center">
                 {% if transport.trans_amount is not none %}
                     {{ "{:,.0f}".format(transport.trans_amount) }}
@@ -51,7 +52,7 @@
                     0&nbsp;&nbsp;
                 {% endif %}
             </td>
-            {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
+                {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
             <td align="center">
                 {% if transport.brokerage_fee is not none %}
                     {{ "{:,.0f}".format(transport.brokerage_fee) }}
@@ -60,12 +61,12 @@
                 {% endif %}
             </td>
             {% set ns.total_fee = ns.total_fee + (transport.brokerage_fee or 0) %}
-
         </tr>
             {% endfor %}
+
         <tr>
             <td colspan="8" align="center">총 금액</td>
-            <td align="center">{{ "{:,.0f}".format(ns.total_amount) }}</td>
+            <td align="center">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;</td>
             <td align="center">{{ "{:,.0f}".format(ns.total_fee) }}</td>
         </tr>
         </tbody>
@@ -82,13 +83,13 @@
     </table>
     </div>
 
-
     {% else %}
         <p class="text-center">검색 결과가 없습니다.</p>
+
     {% endif %}
 
+    </div>
 </div>
 
-</body>
-
 {% endblock %}
+</body>

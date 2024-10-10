@@ -1,6 +1,7 @@
 ﻿from collections import defaultdict
 from datetime import datetime
-from flask import Blueprint, render_template, request, url_for, session, g, flash
+from flask import Blueprint, render_template, flash, request, redirect, url_for, session, g
+from werkzeug.utils import redirect
 from .. import db
 from truck.models import Transport, Cost, Company
 from sqlalchemy import func  # SQLAlchemy의 func 임포트
@@ -40,13 +41,27 @@ def balance_period():
     form = BalancePeriodForm()
     transports = []
     costs = []
+    today = datetime.now()  # Get the current date and time
+
+    user_id = session.get('user_id')  # 로그인된 사용자 ID
+
+    if not user_id:
+        flash("User is not logged in.")
+        return redirect(url_for('auth.login'))
+
     if form.validate_on_submit():
         start_date = form.start_date.data
         end_date = form.end_date.data
 
         # Assuming you have defined models Transport and Cost and a method to get the relevant data
-        transports = Transport.query.filter(Transport.trans_date >= start_date, Transport.trans_date <= end_date, Transport.trans_type == 'N').all()
-        costs = Cost.query.filter(Cost.cost_date >= start_date, Cost.cost_date <= end_date).all()
+        transports = Transport.query.filter(
+            Transport.trans_date >= start_date, Transport.trans_date <= end_date,
+                Transport.trans_type == 'N', Transport.user_id == user_id
+        ).all()
+
+        costs = Cost.query.filter(
+            Cost.cost_date >= start_date, Cost.cost_date <= end_date, Cost.user_id == user_id
+        ).all()
 
         # Group data by date
         grouped_data = defaultdict(lambda: {'transports': [], 'costs': []})
@@ -61,11 +76,11 @@ def balance_period():
         # No need to convert dates since they are already datetime.date objects
         sorted_dates = sorted(grouped_data.keys())
 
-        return render_template('balance/balance_period_results.html', form=form,
-                    transports=transports, costs=costs, cost_class_choices=Cost.COST_CLASS_CHOICES,
-                            payment_choices=Cost.PAYMENT_CHOICES, grouped_data=grouped_data,
-                                    sorted_dates=sorted_dates, max=max, Cost=Cost,
-                                            total_items=total_items, enumerate=enumerate)
+        return render_template('balance/balance_period_results.html',
+                form=form, cost_class_choices=Cost.COST_CLASS_CHOICES, today=today,
+                    payment_choices=Cost.PAYMENT_CHOICES, transports=transports,
+                            costs=costs, grouped_data=grouped_data, sorted_dates=sorted_dates,
+                               max=max, Cost=Cost, total_items=total_items, enumerate=enumerate)
 
     return render_template('balance/balance_period.html', form=form)
 
@@ -76,11 +91,17 @@ def tax_period():
     form = TaxPeriodForm()
     results = []
 
+    user_id = session.get('user_id')  # 로그인된 사용자 ID
+
+    if not user_id:
+        flash("User is not logged in.")
+        return redirect(url_for('auth.login'))
+
     if form.validate_on_submit():
         start_date = form.start_date.data
         end_date = form.end_date.data
 
-        # Cost 테이블을 LEFT JOIN으로 그룹화
+        # Cost 테이블을 LEFT JOIN으로 그룹화, user_id로 필터링
         results = (
             db.session.query(
                 func.any_value(Company.business_no).label('business_no'),  # ANY_VALUE 사용
@@ -90,6 +111,8 @@ def tax_period():
             )
             .outerjoin(Cost, Cost.cost_company == Company.firm)  # LEFT OUTER JOIN
             .filter(
+                Cost.user_id == user_id,  # Cost 테이블에서 user_id 필터 추가
+                Company.user_id == user_id,  # Company 테이블에서 user_id 필터 추가
                 Cost.cost_date.between(start_date, end_date),
                 Company.company_class == 'P'
             )
@@ -119,13 +142,20 @@ def paper_period():
     results = []
     total_amount = 0  # 초기값을 0으로 설정
 
+    user_id = session.get('user_id')  # 로그인된 사용자 ID
+
+    if not user_id:
+        flash("User is not logged in.")
+        return redirect(url_for('auth.login'))
+
     if form.validate_on_submit():
         start_date = form.start_date.data
         end_date = form.end_date.data
 
         # 첫 번째 쿼리: 특정 조건에 맞는 Transport 데이터를 가져오기
         transports = Transport.query.filter(
-            Transport.payment == 'P',
+                Transport.payment == 'P',  Transport.user_id == user_id,
+                        Company.user_id == user_id,
             or_(
                 Transport.terms.in_(['TP', 'TF']),
                 Transport.terms.in_(['CP', 'CF']),
@@ -138,7 +168,8 @@ def paper_period():
         for transport in transports:
             company = None
             if transport.terms in ['TP', 'TF']:
-                company = Company.query.filter_by(firm=transport.trans_company).first()
+                company = Company.query.filter_by(
+                    firm=transport.trans_company).first()
             elif transport.terms in ['CP', 'CF']:
                 company = Company.query.filter_by(firm=transport.consignor).first()
             elif transport.terms in ['DP', 'DF']:
@@ -181,13 +212,20 @@ def elect_period():
     results = []
     total_amount = 0  # 초기값을 0으로 설정
 
+    user_id = session.get('user_id')  # 로그인된 사용자 ID
+
+    if not user_id:
+        flash("User is not logged in.")
+        return redirect(url_for('auth.login'))
+
     if form.validate_on_submit():
         start_date = form.start_date.data
         end_date = form.end_date.data
 
         # 첫 번째 쿼리: 특정 조건에 맞는 Transport 데이터를 가져오기
         transports = Transport.query.filter(
-            Transport.payment == 'E',
+            Transport.payment == 'E',   Transport.user_id == user_id,
+                        Company.user_id == user_id,
             or_(
                 Transport.terms.in_(['TP', 'TF']),
                 Transport.terms.in_(['CP', 'CF']),

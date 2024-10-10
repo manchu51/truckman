@@ -1,0 +1,12 @@
+﻿{% extends "shared/admin_base.html" %}
+{% block content %}
+<div class="container">
+    <h5 class="text-center">업체 삭제</h5>
+    <p>정말로 이 업체를 삭제하시겠습니까?</p>
+    <form method="post" action="{{ url_for('admin_company.admin_company_delete', id=company.id) }}">
+        {{ form.hidden_tag() }} <!-- CSRF 토큰 포함 -->
+        <button type="submit" class="btn btn-danger">삭제</button>
+        <a href="{{ url_for('admin_company.company_period') }}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+{% endblock %}

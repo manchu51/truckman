@@ -1,32 +1,36 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-<style>
-    .small-text {
-        font-size: 0.875em; /* 글자 크기를 조절할 수 있습니다.font-size: 0.875em; */
-    }
-</style>
+<span style="margin-left: 20px;" id="current_datetime"></span>
 
-<br>
-<div class="container">
-    <h5 class="text-center">업체 현황 검색</h5>
+<form method="post">
+    {{ form.hidden_tag() }}
+    {% include "form_errors.html" %}
 
-    <form method="post" action="{{ url_for('company.company_period') }}">
-        <!--<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">-->
-        {{ form.hidden_tag() }} <!-- CSRF 토큰 포함 -->
-        {% include "form_errors.html" %}
-        <div class="container-fluid">
-            <table style="width:100%" class="table table-bordered table-striped">
-                <tr bgcolor="#ffddee">
-                    <td style="width:10%" class="text-center"><label for="start_date">시작 일자:</label></td>
-                    <td style="width:15%" class="text-center"><input type="date" class="form-control" id="start_date" name="start_date" required></td>
-                    <td style="width:30%">&nbsp;</td>
-                    <td style="width:10%" class="text-center"><label for="end_date">마지막 일자:</label></td>
-                    <td style="width:15%" class="text-center"><input type="date" class="form-control" id="end_date" name="end_date" required></td>
-                </tr>
-            </table>
-        </div>
-        <div><button type="submit" class="btn btn-primary">검색</button></div>
-    </form>
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+           <thead class="head-dark">
+           <tr bgcolor="#ffddee">
+               <td colspan="4" class="text-center"><h3>기간별 &nbsp;&nbsp;&nbsp;&nbsp; 업체현황 검색</h3></td>
+               <td>&nbsp;</td>
+           </tr>
+           <tr>
+               <td style="width:10%" class="text-left"><label for="start_date"><strong>시작 일자</strong></label></td>
+               <td style="width:15%" class="text-center">{{ form.start_date(class="form-control") }}</td>
+               <td style="width:10%" class="text-center"><label for="end_date"><strong>마지막 일자</strong></label></td>
+               <td style="width:15%" class="text-center">{{ form.end_date(class="form-control") }}</td>
+               <td style="width:50%">&nbsp;</td>
+           </tr>
+           </thead>
+        </table>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">{{ form.submit() }}</button>
+    </div>
 </div>
+
+</form>
+
 {% endblock %}
+

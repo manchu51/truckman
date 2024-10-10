@@ -1,0 +1,171 @@
+<head>
+    <meta charset="UTF-8">
+    <title>거래처 미수금 현황</title>
+
+    <!--
+    CSS에서의 한계:
+
+    CSS만으로는 모든 브라우저에서 동일하게 인쇄 결과를 제어하기 어렵습니다.
+    따라서 중요한 문서의 경우 PDF 생성 기능을 사용해 일관된 인쇄 출력을 보장할 수 있습니다.
+    HTML을 PDF로 변환하는 도구(예: wkhtmltopdf 또는 Puppeteer) 등을 사용하면
+    모든 브라우저에서 동일한 결과를 얻을 수 있습니다.
+    -->
+
+<style>
+     .no-print {
+        display: none !important; /* 강제 적용 Forcefully hide elements during print */
+     }
+
+     /* 추가적인 스타일 설정           Optimize for print */
+     @media print {
+        .navbar {
+            display: none !important; /* 네비게이션 바를 인쇄에서 숨김 */
+            visibility: hidden;        /* Ensure it remains invisible */
+        }
+
+        .bottom {
+            display: none !important; /* bottom.html 를 인쇄에서 숨김 */
+            visibility: hidden;        /* Ensure it remains invisible */
+        }
+
+        @page {
+            size: A4;
+            margin: 25mm 10mm; /* 상단/하단 25mm, 왼쪽/오른쪽 10mm 여백 */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 0.75em;     /* Smaller font size for print */
+            margin: 10px;          /* margin: 0;  기본 margin 제거 */
+            padding: 10px;         /* padding: 0;  인쇄 여백 설정과 충돌을 피하기 위해 패딩 제거 */
+            line-height: 1.4;
+        }
+
+        h1 {
+            font-size: 1.4em; /* Slightly reduced size */
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1em;
+            margin-top: 8px;
+            margin-bottom: 5px;
+        }
+
+        /* Hide navigation and non-print elements */
+        .no-print {
+            display: none;
+        }
+
+        /* Avoid page breaks within critical content */
+        .avoid-break {
+            page-break-inside: avoid;
+        }
+
+        /* Prevent page breaks inside these elements */
+        .no-page-break {
+            page-break-inside: avoid;
+        }
+
+        /* Optional: Force page breaks before/after specific elements */
+        .page-break {
+            page-break-before: always;  /* Forces a page break before the element */
+        }
+
+        .container { width: 100%; }
+            h6 { text-align: center; font-size: 0.7em; margin: 0; padding: 2mm 0; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
+            th, td {
+                border: 1px solid #ddd; /* 각 칼럼에 가는 선 테두리 */
+                padding: 5px;
+                text-align: center;
+                font-size: smaller;
+            }
+            th { background-color: #ffddee; }
+
+        .total-row td { border: none; font-weight: bold; }
+
+        /* 머리글과 바닥글 제거 */
+        header, footer {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    window.onload = function() {
+        window.print();
+    }
+
+    window.onafterprint = function() {
+        document.querySelector('.navbar').style.display = '';
+    };
+</script>
+
+</head>
+<body>
+{% extends "base.html" %}
+{% block content %}
+
+    <table style="width:100%">
+        <thead>
+        <tr class="no-border">
+            <td colspan="4" align="center" class="no-border">
+                <h6><strong>{{ trans_company }}&nbsp;&nbsp;&nbsp;&nbsp;미수금 현황</strong></h6>
+            </td>
+            <td colspan="4" align="right" class="no-border" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <h6><strong>오늘 날짜 : {{ today_date }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong>페이지: &nbsp;&nbsp; {{ page }}&nbsp;&nbsp;/&nbsp;&nbsp;{{ total_pages }}</strong></h6> <!-- 페이지 정보 추가 -->
+            </td>
+        </tr>
+         <tr style="border: 1px solid #ddd;">
+            <th style="width:3%; text-align:center; border: 1px solid #ddd;">NO</th>
+            <th style="width:6%; text-align:center; border: 1px solid #ddd;">운송일자</th>
+            <th style="width:10%; text-align:center; border: 1px solid #ddd;">송하주</th>
+            <th style="width:15%; text-align:center; border: 1px solid #ddd;">상차지</th>
+            <th style="width:10%; text-align:center; border: 1px solid #ddd;">수하주</th>
+            <th style="width:15%; text-align:center; border: 1px solid #ddd;">하차지</th>
+            <th style="width:8%; text-align:center; border: 1px solid #ddd;">운송료</th>
+            <th style="width:8%; text-align:center; border: 1px solid #ddd;">비고</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+            {% set ns = namespace(total_amount=0, total_count=0) %}
+            {% for transport in transports %}
+
+        <tr style="border: 1px solid #ddd;">
+            <td style="text-align:center; border: 1px solid #ddd;">{{ loop.index }}</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ transport.trans_date }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.consignor }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.consignee }}</td>
+            <td style="text-align:left border: 1px solid #ddd;">{{ transport.unload_region }}</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.trans_amount) }}</td>
+            {% set ns.total_amount = ns.total_amount + (transport.trans_amount) %}
+            <td style="text-align:center; border: 1px solid #ddd;">{{ transport.comment }}
+            </td>
+        </tr>
+
+            {% endfor %}
+
+        <tr class="total-row" style="border: 1px solid #ddd;">
+            <td colspan="6" style="text-align:center; border: 1px solid #ddd;">미수금 총금액</td>
+            <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(ns.total_amount) }}</td>
+            <td>&nbsp;</td>
+        </tr>
+        </tbody>
+
+    </table>
+
+{% endblock %}
+
+</body>

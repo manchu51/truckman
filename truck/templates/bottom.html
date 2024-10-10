@@ -1,0 +1,50 @@
+<!-- bottom.html -->
+<hr style="border: 2px solid #000; margin-bottom: 1px;">
+
+<div class="footer" style="padding: 20px; background-color: #f1f1f1; text-align: center; font-size: 14px;">
+    <table width="100%" border="0" cellpadding="1" cellspacing="0">
+        <tr>
+            <!-- 텍스트 링크로 만든 메뉴 -->
+            <td><a href="{{ url_for('guide.company_introduce') }}"style="text-decoration: none; color: #000;"><strong>회사소개</strong></a></td>
+            <td><a href="{{ url_for('guide.show_guide') }}" style="text-decoration: none; color: #000;"><strong>사용설명서</strong></a></td>
+            <td><a href="{{ url_for('guide.terms_use') }}" style="text-decoration: none; color: #000;"><strong>이용약관</strong></a></td>
+            <td><a href="{{ url_for('guide.terms_condition') }}" style="text-decoration: none; color: #000;"><strong>계약및동의내역</strong></a></td>
+            <td><a href="{{ url_for('guide.terms_privite') }}" style="text-decoration: none; color: #000;"><strong>개인정보 처리방침</strong></a></td>
+            <td><a href="{{ url_for('guide.customer_service') }}" style="text-decoration: none; color: #000;"><strong>고객센터</strong></a></td>
+            <td><a href="{{ url_for('guide.faq') }}" style="text-decoration: none; color: #000;"><strong>자주 묻는 질문</strong></a></td>
+            <td><a href="{{ url_for('guide.survey') }}" style="text-decoration: none; color: #000;"><strong>설문조사</strong></a></td>
+            <td><a href="{{ url_for('guide.sticker') }}" style="text-decoration: none; color: #000;"><strong>스티커 구입장소</strong></a></td>
+            <td><a href="{{ url_for('guide.faq') }}" style="text-decoration: none; color: #FF0000;"><strong>공지사항</strong></a></td>
+
+
+
+        </tr>
+    </table>
+
+    <hr style="margin: 1px 0;">
+
+    <table width="100%" border="0" cellpadding="10" cellspacing="0">
+        <tr>
+            <!-- 로고 이미지 -->
+            <td align="left" valign="middle" style="padding-bottom: 10px;">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="트럭맨 로고" style="width: 180px; height: auto;">
+            </td>
+             <!-- 연락처 정보 -->
+            <td width="30%" align="left" valign="middle">
+                <p>
+                    전화번호 : 051-332-1128 / 팩스번호 : 051-333-1140<br>
+                    메일문의 : <a href="mailto:manchu5104@gmail.com" style="color: #000; text-decoration: none;">manchu5104@gmail.com</a>
+                </p>
+            </td>
+            <!-- 회사 정보 -->
+            <td width="50%" align="left" valign="top">
+                <p>
+                    사업자등록번호 : 123-45-67890 / 통신판매업신고 : 2024-부산-00123<br>
+                    대표이사 : 김 영실 / 개인정보 관리책임자 : 김 영실 / 개인정보 보호기간 : 회원탈퇴시<br>
+                    <strong>&copy; 2024 Truckman. All Rights Reserved.</strong>
+                    <small>[무단 이메일 수집거부]</small>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

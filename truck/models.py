@@ -1,6 +1,10 @@
 from . import db
 from datetime import datetime
 
+from itsdangerous import URLSafeTimedSerializer as Serializer
+#from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+from flask import current_app
 
 class Question(db.Model):
     question_voter = db.Table(
@@ -40,12 +44,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     register_date = db.Column(db.Date, nullable=False)
     modify_date = db.Column(db.DateTime(), nullable=True)
+    cancel_date = db.Column(db.DateTime(), nullable=True)
+    deposit_date = db.Column(db.DateTime(), nullable=True)
     username = db.Column(db.String(32), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     truck_name = db.Column(db.String(16))
     truck_no = db.Column(db.String(12), nullable=False)
     truck_class = db.Column(db.String(12))
-    truck_ton = db.Column(db.Numeric(precision=3, scale=1), nullable=False)
+    truck_ton = db.Column(db.Numeric(precision=3, scale=1), nullable=True)
     business_no = db.Column(db.String(12), nullable=False)
     company = db.Column(db.String(32), nullable=False)
     member_name = db.Column(db.String(16), nullable=False)
@@ -53,7 +59,7 @@ class User(db.Model):
     address = db.Column(db.String(56))
     business_status = db.Column(db.String(16), nullable=False)
     business_item = db.Column(db.String(16), nullable=False)
-    email = db.Column(db.String(64), unique=True)
+    email = db.Column(db.String(64), unique=True, nullable=True)    # nullable=True로 설정
     cellphone = db.Column(db.String(13), nullable=False)
     tel = db.Column(db.String(12))
     fax = db.Column(db.String(12))
@@ -61,6 +67,7 @@ class User(db.Model):
     bank_no = db.Column(db.String(24))
     bank_account = db.Column(db.String(16))
     description = db.Column(db.String(32))
+    is_admin = db.Column(db.Boolean, default=False)
 
 
 class Transport(db.Model):
@@ -81,6 +88,7 @@ class Transport(db.Model):
     brokerage_date = db.Column(db.Date, nullable=True)
     trans_type = db.Column(db.String(1), nullable=False)
     comment = db.Column(db.String(32), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
 
 
 class Cost(db.Model):
@@ -94,12 +102,7 @@ class Cost(db.Model):
     bank_card = db.Column(db.String(32))
     cost_amount = db.Column(db.Integer)
     memo = db.Column(db.String(32), nullable=True)
-
-    # Example choices definition
-    """
-    위 코드에서 COST_CLASS_CHOICES와 PAYMENT_CHOICES는 중괄호 {} 로 둘러싸여 있어 
-    set으로 인식됩니다. 그러나 실제로는 키 - 값 쌍으로 정의된 dictionary여야 합니다.
-    """
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
 
     COST_CLASS_CHOICES = {
         'D': '경유',
@@ -116,7 +119,7 @@ class Cost(db.Model):
         'E': '전자세금계산서',
         'P': '종이세금계산서',
         'S': '간이세금계산서',
-        'C': '카드',
+        'C': '카드발급',
         'R': '간이영수증',
         'M': '현금영수증',
         'O': '기타'
@@ -140,6 +143,8 @@ class Company(db.Model):
     tel = db.Column(db.String(12))
     fax = db.Column(db.String(12))
     note = db.Column(db.String(32), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+
 
 
 

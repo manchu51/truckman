@@ -1,0 +1,75 @@
+﻿{% extends "shared/admin_base.html" %}
+{% block content %}
+
+<br>
+<div class="container">
+    <h5 class="text-center">업체 수정</h5>
+    <form method="post" action="{{ url_for('admin_company.admin_company_modify', id=company.id) }}">
+        {{ form.hidden_tag() }} <!-- CSRF 토큰 -->
+        <div class="form-group">
+            <label for="register_date">등록 일자:</label>
+            <input type="date" class="form-control" id="register_date" name="register_date" value="{{ company.register_date }}" required>
+        </div>
+        <div class="form-group">
+            <label for="company_class">회사 분류:</label>
+            <select class="form-control" id="company_class" name="company_class" required>
+                 <option value="R" {{ 'selected' if company.company_class == 'R' else '' }}>매출처</option>
+                 <option value="P" {{ 'selected' if company.company_class == 'P' else '' }}>매입처</option>
+            </select>
+                <!--
+                <option value="A" {% if company.company_class == 'R' %}selected{% endif %}>매출처</option>
+                <option value="P" {% if company.company_class == 'P' %}selected{% endif %}>매입처</option>
+                -->
+        </div>
+        <div class="form-group">
+            <label for="business_no">사업자 번호:</label>
+            <input type="text" class="form-control" id="business_no" name="business_no" value="{{ company.business_no }}" required>
+        </div>
+        <div class="form-group">
+            <label for="firm">업체명:</label>
+            <input type="text" class="form-control" id="firm" name="firm" value="{{ company.firm }}" required>
+        </div>
+        <div class="form-group">
+            <label for="president">대표자:</label>
+            <input type="text" class="form-control" id="president" name="president" value="{{ company.president }}" >
+        </div>
+        <div class="form-group">
+            <label for="zip">우편 번호:</label>
+            <input type="text" class="form-control" id="zip" name="zip" value="{{ company.zip }}">
+        </div>
+        <div class="form-group">
+            <label for="address">주소:</label>
+            <input type="text" class="form-control" id="address" name="address" value="{{ company.address }}">
+        </div>
+        <div class="form-group">
+            <label for="business_status">업태:</label>
+            <input type="text" class="form-control" id="business_status" name="business_status" value="{{ company.business_status }}">
+        </div>
+        <div class="form-group">
+            <label for="business_item">종목:</label>
+            <input type="text" class="form-control" id="business_item" name="business_item" value="{{ company.business_item }}">
+        </div>
+        <div class="form-group">
+            <label for="email">이메일:</label>
+            <input type="text" class="form-control" id="email" name="email" value="{{ company.email }}">
+        </div>
+        <div class="form-group">
+            <label for="cellphone">핸드폰:</label>
+            <input type="text" class="form-control" id="cellphone" name="cellphone" value="{{ company.cellphone }}">
+        </div>
+        <div class="form-group">
+            <label for="tel">전화번호:</label>
+            <input type="text" class="form-control" id="tel" name="tel" value="{{ company.tel }}">
+        </div>
+        <div class="form-group">
+            <label for="fax">fax 번호:</label>
+            <input type="text" class="form-control" id="fax" name="fax" value="{{ company.fax }}">
+        </div>
+        <div class="form-group">
+            <label for="business_item">비고:</label>
+            <input type="text" class="form-control" id="note" name="note" value="{{ company.note }}">
+        </div>
+        <button type="submit" class="btn btn-primary">수정</button>
+    </form>
+</div>
+{% endblock %}

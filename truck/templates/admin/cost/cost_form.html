@@ -1,0 +1,134 @@
+﻿{% extends "shared/admin_base.html" %}
+{% block content %}
+
+
+<style>
+    /* Remove the arrows/spinners from number inputs */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .date-time-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+
+    .wide-input {
+        width: 100%;
+    }
+
+</style>
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<form method="post">
+{{ form.csrf_token }}
+{% include "form_errors.html" %}
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+    <!--
+            <table style="width:100%" class="table table-bordered table-striped">
+            -->
+        <thead class="thead-dark">
+        <tr bgcolor="#ffddee">
+            <th colspan="6" class="text-center"><h6><strong>경비 입력</strong></h6></th>
+            <th colspan="3" class="text-center"><h6><strong>오늘 날짜 :
+                {{ today|datetime('%Y-%m-%d') }} 시각 : {{ today|datetime('%H:%M:%S %p') }}
+                        </strong></h6></th>
+        </tr>
+
+        <tr style="width:100%" bgcolor="#ddeeff">
+            <th style="width:3%" class="text-center">NO</th>
+            <th style="width:10%" class="text-center" ><label for="cost_date">경비 일자</label></th>
+            <th style="width:12%" class="text-center"><label for="cost_company">회사명</label></th>
+            <th style="width:8%" class="text-center" ><label for="cost_class">경비 형태</label></th>
+            <th style="width:15%" class="text-center"><label for="statement">거래 내역</label></th>
+            <th style="width:10%" class="text-center" ><label for="payment">거래 방법</label></th>
+            <th style="width:8%" class="text-center"><label for="bank_card">카드 은행</label></th>
+            <th style="width:8%" class="text-center"><label for="cost_amount">금액</label></th>
+            <th style="width:15%" class="text-center"><label for="memo">비고</label></th>
+        </tr>
+        </thead>
+
+        <tr style="width:100%" bgcolor="#ffffdd">
+            <td align="center">{{ count }}1</td>
+            <td><input type="date" class="form-control" id="cost_date" name="cost_date" placeholder="yyyy-mm-dd" style="width: 160px;" required></td>
+            <td><input type="text" class="form-control" id="cost_company" name="cost_company"></td>
+            <td>
+                <select class="form-control" id="cost_class" name="cost_class">
+                    <option value="D">경유</option>
+                    <option value="G">휘발유</option>
+                    <option value="E">전기충전</option>
+                    <option value="T">차량관리</option>
+                    <option value="N">생필품</option>
+                    <option value="M">식대</option>
+                    <option value="F">면세품목</option>
+                    <option value="O">기타</option>
+                </select>
+           </td>
+           <td><input type="text" class="form-control" id="statement" name="statement"> </td>
+           <td>
+               <select class="form-control" id="payment" name="payment">
+                    <option value="E">전자세금계산서</option>
+                    <option value="P">종이세금계산서</option>
+                    <option value="S">간이세금계산서</option>
+                    <option value="C" selected>카드</option>
+                    <option value="R">간이영수증</option>
+                    <option value="M">현금영수증</option>
+                    <option value="O">기타</option>
+                </select>
+           </td>
+           <td><input type="text" class="form-control" id="bank_card" name="bank_card"></td>
+           <td><input type="number" class="form-control" id="cost_amount" name="cost_amount"
+                      min="0" max="10000000" step="1" required></td>
+           <td><input type="text" class="form-control" id="memo" name="memo"></td>
+        </tr>
+
+        <tr>
+            <td colspan="3" align="left">
+                <button type="submit" class="btn btn-primary">경비 입력</button>
+            </td>
+            <td colspan="5" align="center" style="vertical-align: bottom;">
+                <h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 : {{ today|datetime('%Y-%m-%d') }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;경비 현황</strong></h6>
+            </td>
+            <td colspan="1" align="center">&nbsp;</td>
+        </tr>
+
+            {% if costs %}
+            {% for idx, cost in enumerate(costs) %}
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td>{{ cost.cost_date }}</td>
+            <td>{{ cost.cost_company }}</td>
+            <td class="text-center">{{ cost_class_choices[cost.cost_class] }}</td>
+            <td>{{ cost.statement }}</td>
+            <td class="text-center">{{ payment_choices[cost.payment] }}</td>
+            <td class="text-center">{{ cost.bank_card }}</td>
+            <td align="right">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;</td>
+            <td>{{ cost.memo }}</td>
+        <tr>
+            {% endfor %}
+        {% endif %}
+
+        </table>
+    </div>
+</div>
+</form>
+
+{% endblock %}
+
+
+
+
+

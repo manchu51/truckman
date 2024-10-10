@@ -1,23 +1,19 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-<style>
-    .small-text {
-        font-size: 0.875em;
-    }
-</style>
-<br>
+<span style="margin-left: 20px;" id="current_datetime"></span>
 
-<div class="container">
-    <h5 class="text-center">미수금 입금</h5>
-    <form method="post" action="{{ url_for('transport.trans_update_set') }}">
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">기간별 &nbsp;&nbsp;&nbsp;&nbsp; 미수금 현황</h5>
 
-        {{ form.hidden_tag() }}
-        {% include "form_errors.html" %}
+        {% if transports %}
+        <form method="post" action="{{ url_for('transport.trans_update_set') }}">
+            {{ form.hidden_tag() }}
+            {% include "form_errors.html" %}
 
-    {% if transports %}
-    <table class="table table-bordered table-striped small-text">
-        <thead class="thead-dark">
+        <table class="table table-bordered table-striped small-text">
+        <thead class="head-dark">
         <tr bgcolor="#ffddee">
             <th style="width:3%" class="text-center">NO</th>
             <th style="width:8%" class="text-center">운송일자</th>
@@ -27,9 +23,6 @@
             <th style="width:12%" class="text-center">수하주</th>
             <th style="width:16%" class="text-center">하차지</th>
             <th style="width:8%" class="text-center">운송료</th>
-            <!--
-            <th style="width:7%" class="text-center">알선료</th>
-            -->
             <th style="width:12%" class="text-center">입금일자</th>
         </tr>
         </thead>
@@ -45,11 +38,8 @@
             <td>{{ transport.load_region }}</td>
             <td>{{ transport.consignee }}</td>
             <td>{{ transport.unload_region }}</td>
-            <td align="right">{{ "{:,.0f}".format(transport.trans_amount or 0) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td align="right">{{ "{:,.0f}".format(transport.trans_amount or 0) }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             {% set ns.total_amount = ns.total_amount + (transport.trans_amount or 0) %}
-            <!--
-            <td align="right">{{ "{:,.0f}".format(transport.brokerage_fee or 0) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            -->
             <td>
                 <input type="date" class="form-control"
                        name="trans_set_date_{{ transport.id }}"
@@ -60,7 +50,7 @@
 
         <tr>
             <td colspan="7" align="center">총 금액</td>
-            <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td align="right">{{ "{:,.0f}".format(ns.total_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td colspan="1">&nbsp;</td>
         </tr>
         </tbody>
@@ -75,6 +65,8 @@
         <button type="submit" class="btn btn-primary">입금 일자 저장</button>
     </div>
     </form>
+
+    </div>
 </div>
 
 {% endblock %}

@@ -1,0 +1,59 @@
+﻿{% extends "shared/admin_base.html" %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">기간별 &nbsp;&nbsp;&nbsp;&nbsp; 경비현황</h5>
+        {% if costs %}
+
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+            <thead class="head-dark">
+            <tr>
+                <th style="width:5%" class="text-center">NO</th>
+                <th style="width:8%" class="text-center">경비 일자</th>
+                <th style="width:12%" class="text-center">회사명</th>
+                <th style="width:10%" class="text-center">경비 형태</th>
+                <th style="width:12%" class="text-center">거래 내역</th>
+                <th style="width:10%" class="text-center">거래 방법</th>
+                <th style="width:8%" class="text-center">카드 은행</th>
+                <th style="width:8%" class="text-center">경비 금액</th>
+                <th style="width:12%" class="text-center">비고</th>
+                <th style="width:5%" class="text-center">수정</th>
+                <th style="width:5%" class="text-center">삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% set ns = namespace(total_cost = 0) %}
+                {% for idx, cost in enumerate(costs) %}
+            <tr>
+                <td align="center">{{ idx + 1 }}</td>
+                <td align="center">{{ cost.cost_date }}</td>
+                <td align="center">{{ cost.cost_company }}</td>
+                <td align="center">{{ cost_class_choices[cost.cost_class] }}</td>
+                <td align="center">{{ cost.statement }}</td>
+                <td align="center">{{ payment_choices[cost.payment] }}</td>
+                <td align="center">{{ cost.bank_card }}</td>
+                <td align="center">{{ "{:,.0f}".format(cost.cost_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                {% set ns.total_cost = ns.total_cost + cost.cost_amount %}
+                <td align="center">{{ cost.memo }}</td>
+                <td><a href="{{ url_for('admin_cost.admin_cost_modify', id=cost.id) }}" class="btn btn-warning btn-sm">수정</a></td>
+                <td><a href="{{ url_for('admin_cost.admin_cost_delete', id=cost.id) }}" class="btn btn-danger btn-sm">삭제</a></td>
+            </tr>
+                {% endfor %}
+            <tr>
+                <td colspan="7" class="text-center">총 금액</td>
+                <td align="center">{{ "{:,.0f}".format(ns.total_cost) }}&nbsp;&nbsp;&nbsp;</td>
+                <td colspan="3"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        {% else %}
+            <p class="text-center">검색 결과가 없습니다.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

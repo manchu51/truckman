@@ -1,140 +1,127 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block content %}
-<br>
-<div class="container">
-    <h5 class="text-center">운송 수정</h5>
 
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+
+    <h5 class="text-left" style="color: #0000FF;"> &nbsp; 운송 수정 </h5>
     <form method="post" action="{{ url_for('transport.trans_modify', id=transport.id) }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
 
-        <div class="form-group">
-            <label for="trans_date">운송 일자:</label>
-            <input type="date" class="form-control" id="trans_date" name="trans_date" value="{{ transport.trans_date }}" required>
-        </div>
-        <div class="form-group">
-            <label for="trans_company">회사명:</label>
-            <input type="text" class="form-control" id="trans_company" name="trans_company" value="{{ transport.trans_company }}" required>
-        </div>
-        <div class="form-group">
-            <label for="consignor">송하주:</label>
-            <input type="text" class="form-control" id="consignor" name="consignor" value="{{ transport.consignor }}" required>
-        </div>
-        <div class="form-group">
-            <label for="load_region">상차지:</label>
-            <input type="text" class="form-control" id="load_region" name="load_region" value="{{ transport.load_region }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="unload_date">하차 일자:</label>
-            <input type="date" class="form-control" id="unload_date" name="unload_date" value="{{ transport.unload_date }}" required>
-        </div>
-        <div class="form-group">
-            <label for="consignee">수하주:</label>
-            <input type="text" class="form-control" id="consignee" name="consignee" value="{{ transport.consignee }}" required>
-        </div>
-        <div class="form-group">
-            <label for="unload_region">하차지:</label>
-            <input type="text" class="form-control" id="unload_region" name="unload_region" value="{{ transport.unload_region }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="terms">거래 조건:</label>
-                <select class="form-control" id="terms" name="terms">
-                    <option value="TP">거래처선불</option>
-                    <option value="TF">거래처후불</option>
-                    <option value="CP">송하주선불</option>
-                    <option value="CF">송하주후불</option>
-                    <option value="DP">수하주선불</option>
-                    <option value="DF">수하주후불</option>
+        <table style="min-width: 1000px;" class="table table-bordered">
+        <thead class="head-dark">
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="trans_date">운송 일자:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="date" class="form-control" id="trans_date" name="trans_date" value="{{ transport.trans_date }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="trans_company">회사명:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="trans_company" name="trans_company" value="{{ transport.trans_company }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="consignor">송하주:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="consignor" name="consignor" value="{{ transport.consignor }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="load_region">상차지:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="load_region" name="load_region" value="{{ transport.load_region }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="unload_date">하차 일자:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="date" class="form-control" id="unload_date" name="unload_date" value="{{ transport.unload_date }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="consignee">수하주:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="consignee" name="consignee" value="{{ transport.consignee }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="unload_region">하차지:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="unload_region" name="unload_region" value="{{ transport.unload_region }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width:10% text-align: left;"><label for="terms">거래 조건:</label></td>
+            <td style="width: 25%; text-align: left; background-color: yellow;">
+                <select class="form-control" id="terms" name="terms" required>
+                    <option value="TP" {% if transport.terms == 'TP' %}selected{% endif %}>거래처선불</option>
+                    <option value="TF" {% if transport.terms == 'TF' %}selected{% endif %}>거래처후불</option>
+                    <option value="CP" {% if transport.terms == 'CP' %}selected{% endif %}>송하주선불</option>
+                    <option value="CF" {% if transport.terms == 'CF' %}selected{% endif %}>송하주후불</option>
+                    <option value="DP" {% if transport.terms == 'DP' %}selected{% endif %}>수하주선불</option>
+                    <option value="DF" {% if transport.terms == 'DF' %}selected{% endif %}>수하주후불</option>
                 </select>
-        </div>
-        <div class="form-group">
-            <label for="trans_amount">운송료:</label>
-            <input type="number" class="form-control" id="trans_amount" name="trans_amount" value="{{ transport.trans_amount }}" required>
-        </div>
-        <div class="form-group">
-            <label for="payment">거래 방법:</label>
-                <select class="form-control" id="payment" name="payment">
-                    <option value="E">전자세금계산서</option>
-                    <option value="P">종이세금계산서</option>
-                    <option value="S">간이세금계산서</option>
-                    <option value="C">카드발급</option>
-                    <option value="R">간이영수증</option>
-                    <option value="M">현금영수증</option>
-                    <option value="O">기타</option>
+            </td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="trans_amount">운송료:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="number" class="form-control" id="trans_amount" name="trans_amount" value="{{ transport.trans_amount }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="payment">거래 방법:</label></td>
+            <td style="width: 25%; text-align: left; background-color: yellow;">
+                <select class="form-control" id="payment" name="payment" required>
+                    <option value="E" {% if transport.payment == 'E' %}selected{% endif %}>전자세금계산서</option>
+                    <option value="P" {% if transport.payment == 'P' %}selected{% endif %}>종이세금계산서</option>
+                    <option value="S" {% if transport.payment == 'S' %}selected{% endif %}>간이세금계산서</option>
+                    <option value="C" {% if transport.payment == 'C' %}selected{% endif %}>카드발급</option>
+                    <option value="R" {% if transport.payment == 'R' %}selected{% endif %}>간이영수증</option>
+                    <option value="M" {% if transport.payment == 'M' %}selected{% endif %}>현금영수증</option>
+                    <option value="O" {% if transport.payment == 'O' %}selected{% endif %}>기타</option>
                 </select>
-        </div>
-        <div class="form-group">
-            <label for="trans_set_date">운송료 입금 일자:</label>
-            <input type="date" class="form-control" id="trans_set_date" name="trans_set_date" value="{{ transport.trans_set_date or '' }}">
-        </div>
-        <div class="form-group">
-            <label for="brokerage_fee">운송 수수료:</label>
-            <input type="number" class="form-control" id="brokerage_fee" name="brokerage_fee" value="{{ transport.brokerage_fee }}">
-        </div>
-
-        <div class="form-group">
-            <label for="brokerage_date">수수료 지급 일자:</label>
-            <input type="date" class="form-control" id="brokerage_date" name="brokerage_date" value="{{ transport.brokerage_date or '' }}">
-        </div>
-
-        <div class="form-group">
-            <label for="trans_type">거래 형태:</label>
-                <select class="form-control" id="trans_type" name="trans_type">
-                    <option value="N">정상거래</option>
-                    <option value="V">부가가치세용</option>
+            </td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="trans_set_date">운송료 입금 일자:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="date" class="form-control" id="trans_set_date" name="trans_set_date" value="{{ transport.trans_set_date or '' }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="brokerage_fee">운송 수수료:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="number" class="form-control" id="brokerage_fee" name="brokerage_fee" value="{{ transport.brokerage_fee }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="brokerage_date">수수료 지급 일자:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="date" class="form-control" id="brokerage_date" name="brokerage_date" value="{{ transport.brokerage_date or '' }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="trans_type">거래 형태:</label></td>
+            <td style="width: 25%; text-align: left; background-color: yellow;">
+                <select class="form-control" id="trans_type" name="trans_type" required>
+                    <option value="N" {% if transport.trans_type == 'N' %}selected{% endif %}>정상거래</option>
+                    <option value="V" {% if transport.trans_type == 'V' %}selected{% endif %}>부가가치세용</option>
                 </select>
-        </div>
-        <div class="form-group">
-            <label for="comment">비고:</label>
-            <input type="text" class="form-control" id="comment" name="comment" value="{{ transport.comment }}">
-        </div>
-        <button type="submit" class="btn btn-primary">운송 수정</button>
+            </td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="comment">비고:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="comment" name="comment" value="{{ transport.comment }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" class="btn btn-primary">운송 수정</button>
+            </td>
+        </tr>
+        </thead>
+        </table>
+
     </form>
+
+    </div>
 </div>
-
-
-<!-- JavaScript to set the selected option -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var transMethod = "{{ transport.trans_method }}";
-        document.getElementById('trans_method').value = transMethod;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var transClass = "{{ transport.trans_class }}";
-        document.getElementById('trans_class').value = transClass;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var loadMethod = "{{ transport.load_method }}";
-        document.getElementById('load_method').value = loadMethod;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var loadState = "{{ transport.load_state }}";
-        document.getElementById('load_state').value = loadState;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var unloadMethod = "{{ transport.unload_method }}";
-        document.getElementById('unload_method').value = unloadMethod;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var Terms = "{{ transport.terms }}";
-        document.getElementById('terms').value = Terms;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var Payment = "{{ transport.payment }}";
-        document.getElementById('payment').value = Payment;
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var transType = "{{ transport.trans_type }}";
-        document.getElementById('trans_type').value = transType;
-    });
-</script>
 
 {% endblock %}

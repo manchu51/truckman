@@ -1,0 +1,99 @@
+  <!-- ADMIN 네비게이션 바 -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom no-print">
+      <div class="container-fluid">
+
+          <button class="navbar-toggler" type="button"
+                 data-bs-toggle="collapse"
+                 data-bs-target="#navbarSupportedContent"
+                 aria-controls="navbarSupportedContent"
+                 aria-expanded="false"
+                 aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <!-- 회원관리 Dropdown -->
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="memberManagementDropdown" role="button"
+                         data-bs-toggle="dropdown" aria-expanded="false">회원관리</a>
+                      <ul class="dropdown-menu" aria-labelledby="memberManagementDropdown">
+                          <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}">대시보드 홈</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('admin.manage_users') }}">회원 관리</a></li>
+                      </ul>
+                  </li>
+
+                  <!-- 경비관리 Dropdown -->
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="costManagementDropdown" role="button"
+                         data-bs-toggle="dropdown" aria-expanded="false">경비관리</a>
+                      <ul class="dropdown-menu" aria-labelledby="costManagementDropdown">
+                          <li><a class="dropdown-item" href="{{ url_for('admin_cost.create') }}">경비 입력</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('admin_cost.cost_period') }}">경비현황 <span style="color: red;">[수정/삭제] </span> </a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('admin_cost.cost_class_period') }}">분류별 경비현황</a></li>
+                      </ul>
+                  </li>
+
+                  <!-- 업체관리 Dropdown -->
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="companyManagementDropdown" role="button"
+                         data-bs-toggle="dropdown" aria-expanded="false">업체관리</a>
+                      <ul class="dropdown-menu" aria-labelledby="companyManagementDropdown">
+                          <li><a class="dropdown-item" href="{{ url_for('admin_company.create') }}">업체 등록</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('admin_company.company_period') }}">업체현황 <span style="color: red;"> [수정삭제] </span> </a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('admin_company.company_class_period') }}">업체분류 검색</a></li>
+                      </ul>
+                  </li>
+
+                  <!-- 관리자 대시보드 Dropdown -->
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="adminDashboardDropdown" role="button"
+                         data-bs-toggle="dropdown" aria-expanded="false">관리자 대시보드</a>
+                      <ul class="dropdown-menu" aria-labelledby="adminDashboardDropdown">
+                          <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}">대시보드 홈</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('admin.manage_users') }}">회원 관리</a></li>
+                      </ul>
+                  </li>
+
+                  <!-- 대차대조표 -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('balance.balance_period') }}">대차대조표</a>
+                  </li>
+
+                  <!-- 희망의 길 -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('question._list') }}" style="color: #FF6600;">희망의 길</a>
+                  </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">유용한 사이트</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="https://www.hometax.go.kr/websquare/websquare.html?w2xPath=/ui/pp/index_pp.xml" target="_blank">국세청</a></li>
+                        <li><a class="dropdown-item" href="https://www.fordrivers.or.kr/main/main.do" target="_blank">화물복지 재단 </a></li>
+                        <li><a class="dropdown-item" href="https://www.kotsa.or.kr" target="_blank">교통안전공단 </a></li>
+                        <li><a class="dropdown-item" href="https://www.koroad.or.kr" target="_blank">한국도로교통공단 </a></li>
+                        <li><a class="dropdown-item" href="https://www.ktdb.go.kr/www/selectBbsNttView.do?key=135&bbsNo=10&nttNo=439" target="_blank">국가교통DB</a></li>
+                    </ul>
+                </li>
+
+                {% if g.user %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">회원정보 관리</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('auth.member_modify') }}"><font color="blue">정보 수정</font></a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('auth.member_cancel') }}"><font color="red">회원 탈퇴</font></a></li>
+                    </ul>
+                </li>
+
+
+                  <!-- 로그아웃 -->
+                <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('auth.logout') }}">[로그아웃]</a>
+                </li>
+                {% endif %}
+
+              </ul>
+          </div>
+      </div>
+  </nav>
