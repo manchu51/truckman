@@ -1,0 +1,15 @@
+﻿{% extends "shared/admin_base.html" %}
+{% block content %}
+
+<div class="container">
+    <h5 class="text-center">경비 삭제</h5>
+    <p>정말 삭제하시겠습니까?</p>
+    <form method="post" action="{{ url_for('admin_cost.admin_cost_delete', id=cost.id) }}">
+        {{ form.hidden_tag() }}
+
+        <button type="submit" class="btn btn-danger">삭제</button>
+        <a href="{{ url_for('admin_cost.cost_period') }}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+
+{% endblock %}

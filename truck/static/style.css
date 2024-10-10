@@ -1,48 +1,184 @@
-﻿/* Remove the arrows/spinners from number inputs */
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+﻿  /* Remove the arrows/spinners from number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Common Input Styles */
+.wide-input {
+    width: 100%;
+}
+
+.date-time-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Text and Typography */
+.small-text {
+    font-size: smaller;     /*  font-size: 0.875em; */
+}
+
+/* General Styles for Screen        General Typography*/
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    color: #0056b3;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.2em;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+/* Lists */
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 20px;
+}
+
+/* Container Styles */
+.container {
+    width: 80%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 10%;
+}
+
+/* Highlight and Buttons */
+.highlight {
+    background-color: #f0f8ff;
+    padding: 5px;
+    border-left: 3px solid #0056b3;
+    margin: 10px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Scrollable Table Container */
+.scrollable-table-container {
+    overflow-x: auto;
+}
+
+/* Table Styles */
+.table {
+    min-width: 1200px; /* Adjust as needed */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.total-row td {
+    font-weight: bold;
+}
+
+
+/* Print-specific styles */
+@media print {
+    body {
+        background-color: white;
+        font-size: 0.8em; /* Smaller font size for print */
+        margin: 10px;
+        padding: 10px;
     }
 
-    input[type="number"] {
-        -moz-appearance: textfield;
+    h1 {
+        font-size: 1.5em; /* Reduce size for h1 in print */
     }
 
-    .date-time-container {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
+    h2 {
+        font-size: 1.3em;
     }
 
-
-    .wide-input {
-        width: 100%;
+    h3 {
+        font-size: 1.1em;
     }
-
 
     .small-text {
-    font-size: smaller;
+        font-size: 0.75em; /* Even smaller for print */
     }
 
-/* truckman 전체 css 설정  */
-/* 예제 /templates/auth/terms.html
+    /* Hide non-essential elements for print */
+    .no-print {
+        display: none;
+    }
+}
 
- h1, h2, h3 {
-            color: #0056b3;
-        }
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 1.2em;
-            margin-top: 15px;
-            margin-bottom: 12px;
-        }
-        h3 {
-            font-size: 1.0em;
-            margin-top: 12px;
-            margin-bottom: 10px;
-        }
-         */
+
+/* 게시판 css */
+/* 작은 화면에서는 100% 너비로 조정 */
+@media (max-width: 768px) {
+    .container-fluid {
+        max-width: 100%; /* 모바일 화면에서 너비를 100%로 조정 */
+    }
+
+    th, td {
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    }
+}
+
+
+
+

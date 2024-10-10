@@ -1,75 +1,110 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-<br>
-<div class="container">
-    <h5 class="text-center">업체 수정</h5>
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+
+    <h5 class="text-left" style="color: #0000FF;"> &nbsp; 업체 수정 </h5>
     <form method="post" action="{{ url_for('company.modify_company', company_id=company.id) }}">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
         {{ form.hidden_tag() }} <!-- CSRF 토큰 -->
-        <div class="form-group">
-            <label for="register_date">등록 일자:</label>
-            <input type="date" class="form-control" id="register_date" name="register_date" value="{{ company.register_date }}" required>
-        </div>
-        <div class="form-group">
-            <label for="company_class">회사 분류:</label>
-            <select class="form-control" id="company_class" name="company_class" required>
-                 <option value="R" {{ 'selected' if company.company_class == 'R' else '' }}>매출처</option>
-                 <option value="P" {{ 'selected' if company.company_class == 'P' else '' }}>매입처</option>
-            </select>
-                <!--
-                <option value="A" {% if company.company_class == 'R' %}selected{% endif %}>매출처</option>
-                <option value="P" {% if company.company_class == 'P' %}selected{% endif %}>매입처</option>
-                -->
-        </div>
-        <div class="form-group">
-            <label for="business_no">사업자 번호:</label>
-            <input type="text" class="form-control" id="business_no" name="business_no" value="{{ company.business_no }}" required>
-        </div>
-        <div class="form-group">
-            <label for="firm">업체명:</label>
-            <input type="text" class="form-control" id="firm" name="firm" value="{{ company.firm }}" required>
-        </div>
-        <div class="form-group">
-            <label for="president">대표자:</label>
-            <input type="text" class="form-control" id="president" name="president" value="{{ company.president }}" >
-        </div>
-        <div class="form-group">
-            <label for="zip">우편 번호:</label>
-            <input type="text" class="form-control" id="zip" name="zip" value="{{ company.zip }}">
-        </div>
-        <div class="form-group">
-            <label for="address">주소:</label>
-            <input type="text" class="form-control" id="address" name="address" value="{{ company.address }}">
-        </div>
-        <div class="form-group">
-            <label for="business_status">업태:</label>
-            <input type="text" class="form-control" id="business_status" name="business_status" value="{{ company.business_status }}">
-        </div>
-        <div class="form-group">
-            <label for="business_item">종목:</label>
-            <input type="text" class="form-control" id="business_item" name="business_item" value="{{ company.business_item }}">
-        </div>
-        <div class="form-group">
-            <label for="email">이메일:</label>
-            <input type="text" class="form-control" id="email" name="email" value="{{ company.email }}">
-        </div>
-        <div class="form-group">
-            <label for="cellphone">핸드폰:</label>
-            <input type="text" class="form-control" id="cellphone" name="cellphone" value="{{ company.cellphone }}">
-        </div>
-        <div class="form-group">
-            <label for="tel">전화번호:</label>
-            <input type="text" class="form-control" id="tel" name="tel" value="{{ company.tel }}">
-        </div>
-        <div class="form-group">
-            <label for="fax">fax 번호:</label>
-            <input type="text" class="form-control" id="fax" name="fax" value="{{ company.fax }}">
-        </div>
-        <div class="form-group">
-            <label for="business_item">비고:</label>
-            <input type="text" class="form-control" id="note" name="note" value="{{ company.note }}">
-        </div>
-        <button type="submit" class="btn btn-primary">수정</button>
+
+        <table style="min-width: 1000px;" class="table table-bordered">
+        <thead class="head-dark">
+
+        <tr>
+            <td style="width: 10%; text-align: left;">  <label for="register_date">등록 일자:</label></td>
+            <td style="width: 25%; text-align: left;">
+                <span>{{ company.register_date }}</span>
+                <input type="hidden" name="register_date" value="{{ company.register_date }}">
+                &nbsp;&nbsp;&nbsp;&nbsp;[등록 일자는 수정할 수 없습니다]
+            </td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="company_class">회사 분류:</label></td>
+            <td style="width: 25%; text-align: left; background-color: yellow;">
+                <select class="form-control" id="company_class" name="company_class" required>
+                    <option value="R" {% if company.company_class == 'R' %}selected{% endif %}>매출처</option>
+                    <option value="P" {% if company.company_class == 'P' %}selected{% endif %}>매입처</option>
+                </select>
+            </td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="business_no">사업자 번호:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="business_no" name="business_no" value="{{ company.business_no }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="firm">업체명:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="firm" name="firm" value="{{ company.firm }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="president">대표자:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="president" name="president" value="{{ company.president }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="zip">우편 번호:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="zip" name="zip" value="{{ company.zip }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="address">주소:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="address" name="address" value="{{ company.address }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="business_status">업태:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="business_status" name="business_status" value="{{ company.business_status }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="business_item">종목:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="business_item" name="business_item" value="{{ company.business_item }}" required></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="email">이메일:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="email" name="email" value="{{ company.email }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="cellphone">핸드폰:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="cellphone" name="cellphone" value="{{ company.cellphone }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="tel">전화번호:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="tel" name="tel" value="{{ company.tel }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10%; text-align: left;"><label for="fax">fax 번호:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="fax" name="fax" value="{{ company.fax }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 10% text-align: left;"><label for="note">비고:</label></td>
+            <td style="width: 25%; text-align: left;"><input type="text" class="form-control" id="note" name="note" value="{{ company.note }}"></td>
+            <td style="width: 65%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" class="btn btn-primary">수정</button>
+            </td>
+        </tr>
+        </thead>
+        </table>
+
     </form>
+
+    </div>
 </div>
+
 {% endblock %}

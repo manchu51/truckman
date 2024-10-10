@@ -1,12 +1,22 @@
 ﻿{% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h5 class="text-center">운송 삭제</h5>
-    <p>정말로 이 항목을 삭제하시겠습니까?</p>
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+
+    <h5 class="text-center" style="color: #0000FF;"> {{ transport.trans_company }} &nbsp;&nbsp;&nbsp;&nbsp; 운송 삭제/취소</h5>
+    <p>정말로 이 항목을 삭제 하시겠습니까?</p>
+
     <form method="post" action="{{ url_for('transport.trans_delete', id=transport.id) }}">
         {{ form.hidden_tag() }}
+
         <button type="submit" class="btn btn-danger">삭제</button>
         <a href="{{ url_for('transport.trans_period') }}" class="btn btn-secondary">취소</a>
     </form>
+
+    </div>
 </div>
+
 {% endblock %}

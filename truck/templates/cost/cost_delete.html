@@ -1,15 +1,21 @@
 ﻿{% extends "base.html" %}
 {% block content %}
 
-<div class="container">
-    <h5 class="text-center">경비 삭제</h5>
-    <p>정말 삭제하시겠습니까?</p>
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+    <h5 class="text-center" style="color: #0000FF;"> {{ cost.cost_company }} &nbsp;&nbsp;&nbsp;&nbsp; 경비 삭제/취소</h5>
+    <p>정말로 이 항목을 삭제 하시겠습니까?</p>
+
     <form method="post" action="{{ url_for('cost.cost_delete', id=cost.id) }}">
         {{ form.hidden_tag() }}
 
         <button type="submit" class="btn btn-danger">삭제</button>
         <a href="{{ url_for('cost.cost_period') }}" class="btn btn-secondary">취소</a>
     </form>
+
+    </div>
 </div>
 
 {% endblock %}

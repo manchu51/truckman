@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+
+    <h5 class="text-center" style="color: #0000FF;">{{ user.username }}
+        &nbsp;&nbsp;&nbsp;&nbsp; 회원 탈퇴</h5><br>
+    <h5 class="text-center" style="color: #FF6600;"> 정말로 탈퇴 하시겠습니까? </h5>
+    <h5 class="text-center"> 지금 탈퇴하시면 귀하의 TRUCKMAN 사이트의 모든 데이터를 영원히 복구할 수 없습니다. </h5>
+    <h5 class="text-center"> 다시 한번 신중히 생각하여 주시기 바랍니다.</h5>
+
+    <form method="post" action="{{ url_for('auth.member_cancel', id=user.id) }}">
+        {{ form.hidden_tag() }} <!-- CSRF 토큰 포함 -->
+
+        <button type="submit" class="btn btn-danger">탈퇴</button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-secondary">취소</a>
+    </form>
+
+    </div>
+</div>
+
+{% endblock %}

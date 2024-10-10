@@ -16,15 +16,15 @@ bp = Blueprint('answer', __name__, url_prefix='/answer')
 def create(question_id):
     form = AnswerForm()
     question = Question.query.get_or_404(question_id)
+
     if form.validate_on_submit():
         content = request.form['content']
         answer = Answer(content=content, create_date=datetime.now(), user=g.user)
         question.answer_set.append(answer)
         db.session.commit()
+
         return redirect('{}#answer_{}'.format(
             url_for('question.detail', question_id=question_id), answer.id))
-
-        #return redirect(url_for('question.detail', question_id=question_id))
 
     return render_template('question/question_detail.html', question=question, form=form)
 
@@ -36,19 +36,19 @@ def modify(answer_id):
     if g.user != answer.user:
         flash('수정권한이 없습니다')
         return redirect(url_for('question.detail', question_id=answer.question.id))
+
     if request.method == "POST":
         form = AnswerForm()
         if form.validate_on_submit():
             form.populate_obj(answer)
             answer.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
+
             return redirect('{}#answer_{}'.format(
                 url_for('question.detail', question_id=answer.question.id), answer.id))
-
-            #return redirect(url_for('question.detail', question_id=answer.question.id))
-
     else:
         form = AnswerForm(obj=answer)
+
     return render_template('answer/answer_form.html', form=form)
 
 
@@ -78,5 +78,5 @@ def vote(answer_id):
     return redirect('{}#answer_{}'.format(
         url_for('question.detail', question_id=answer.question.id), answer.id))
 
-    #return redirect(url_for('question.detail', question_id=_answer.question.id))
+
 

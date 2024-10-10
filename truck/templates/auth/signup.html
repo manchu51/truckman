@@ -1,153 +1,242 @@
-﻿{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>TRUCKMAN 회원가입 양식</title>
+</head>
+<body>
 
-<div class="container">
-    <h5 class="my-3 border-bottom pb-2">회원 가입</h5>
+<div class="container my-3" style="max-width: 50%;">
+    <div class="scrollable-table-container">
+
+    <h5 class="my-3 border-bottom pb-2"><font color="#FF6600;">TRUCKMAN</font> 회원 가입</h5>
     <form method="post">
-        <!--<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">-->
-
-        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }} <!-- CSRF 토큰 -->
         {% include "form_errors.html" %}
 
-    <div class="form-group">
-        <label for="username">회원 아이디</label>
-        <input type="text" class="form-control" name="username" id="username"
-                    value="{{ form.username.data or '' }}" required>
-    </div>
+        <table style="min-width: 1000px;" class="table table-bordered">
+        <thead class="head-dark">
 
-    <div class="form-group">
-        <label for="password1">비밀번호</label>
-        <input type="password" class="form-control" name="password1" id="password1"
-                    value="{{ form.password1.data or '' }}" required>
-    </div>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.username.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                 <div style="display: flex; align-items: center; background-color: #E6FFE6;">
+                    {{ form.username(class="form-control", style="flex-basis: 45%;") }}
+                    <span style="flex-basis: 65%; margin-left: 10px;">[&nbsp;2자 부터 12 까지 입력합니다&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.password1.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                <div style="display: flex; align-items: center; background-color: #E6FFE6;">
+                    {{ form.password1(class="form-control", style="flex-basis: 45%;") }}
+                    <span style="flex-basis: 65%; margin-left: 10px;">[&nbsp;2자 부터 12 까지 입력합니다&nbsp;]</span>
+                </div>
 
-    <div class="form-group">
-        <label for="password2">비밀번호 확인</label>
-        <input type="password" class="form-control" name="password2" id="password2"
-                   value="{{ form.password2.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="truck_name">트럭 명칭</label>
-        <input type="text" class="form-control" name="truck_name" id="truck_name"
-                   value="{{ form.truck_name.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="truck_no">트럭 번호</label>
-        <input type="text" class="form-control" name="truck_no" id="truck_no"
-                   value="{{ form.truck_no.data or '' }}" required>
-    </div>
-    <div class="form-group">
-        <label for="truck_class">트럭 종류</label>
-        <input type="text" class="form-control" name="truck_class" id="truck_class"
-                   value="{{ form.truck_class.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="truck_ton">트럭 톤수</label>
-        <input type="text" class="form-control" name="truck_ton" id="truck_ton"
-                   value="{{ form.truck_ton.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="business_no">사업자 등록번호</label>
-        <input type="text" class="form-control" name="business_no" id="business_no"
-                    value="{{ form.business_no.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="company">상호</label>
-        <input type="text" class="form-control" name="company" id="company"
-                   value="{{ form.company.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="member_name">성명</label>
-        <input type="text" class="form-control" name="member_name" id="member_name"
-                   value="{{ form.member_name.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="zip">우편번호</label>
-        <input type="text" class="form-control" name="zip" id="zip"
-                   value="{{ form.zip.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="address">사업장주소</label>
-        <input type="text" class="form-control" name="address" id="address"
-                   value="{{ form.address.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="business_status">업태</label>
-        <input type="text" class="form-control" name="business_status" id="business_status"
-                       value="{{ form.business_status.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="business_item">종목</label>
-        <input type="text" class="form-control" name="business_item" id="business_item"
-                   value="{{ form.business_item.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="email">이메일</label>
-        <input type="text" class="form-control" name="email" id="email"
-                       value="{{ form.email.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="cellphone">핸드폰번호</label>
-        <input type="text" class="form-control" name="cellphone" id="cellphone"
-                   value="{{ form.cellphone.data or '' }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="tel">전화번호</label>
-        <input type="text" class="form-control" name="tel" id="tel"
-                   value="{{ form.tel.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="fax">팩스번호</label>
-        <input type="text" class="form-control" name="fax" id="fax"
-                   value="{{ form.fax.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="bank_name">거래은행명</label>
-        <input type="text" class="form-control" name="bank_name" id="bank_name"
-                    value="{{ form.bank_name.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="bank_no">계좌번호</label>
-        <input type="text" class="form-control" name="bank_no" id="bank_no"
-                  value="{{ form.bank_no.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="bank_account">소유자명</label>
-        <input type="text" class="form-control" name="bank_account" id="bank_account"
-                   value="{{ form.bank_account.data or '' }}">
-    </div>
-
-    <div class="form-group">
-        <label for="description">비고</label>
-        <input type="text" class="form-control" name="description" id="description"
-                   value="{{ form.description.data or '' }}">
-    </div>
-
-    <div>
-        <button type="submit" class="btn btn-primary">가입하기</button>
-    </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.password2.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                <div style="display: flex; align-items: center; background-color: #E6FFE6;">
+                    {{ form.password2(class="form-control", style="flex-basis: 45%;") }}
+                    <span style="flex-basis: 65%; margin-left: 10px;">[&nbsp;비밀번호 다시 한번 입력합니다&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.member_name.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                 <div style="display: flex; align-items: center; background-color: #E6FFE6;">
+                    {{ form.member_name(class="form-control", style="flex-basis: 45%;") }}
+                    <span style="flex-basis: 65%; margin-left: 10px;">[&nbsp;띄워쓰기를 하지 마세요&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">
+                {{ form.cellphone.label }}
+            </td>
+            <td style="width: 45%; text-align: left;">
+                <div style="display: flex; align-items: center; background-color: #E6FFE6;">
+                    {{ form.cellphone(class="form-control", style="flex-basis: 45%;") }}
+                    <span style="flex-basis: 65%; margin-left: 10px;">[&nbsp;010-8888-7777 형식으로 입력&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.truck_no.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                 <div style="display: flex; align-items: center; background-color: #E6FFE6;">
+                    {{ form.truck_no(class="form-control", style="flex-basis: 45%;") }}
+                    <span style="flex-basis: 65%; margin-left: 10px;">[&nbsp;부산90바8877 형식으로 입력&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="truck_ton">트럭 톤수:</label></td>
+            <td style="width: 45%; text-align: left;">
+                <input type="number" class="form-control" name="truck_ton" id="truck_ton" step="0.1"
+                        value="{{ form.truck_ton.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="truck_name">트럭 명칭:</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" id="truck_name" name="truck_name"
+                           value="{{ form.truck_name.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="truck_class">트럭 종류:</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" id="truck_class" name="truck_class"
+                           value="{{ form.truck_class.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="business_no">사업자 등록번호</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" id="business_no" name="business_no"
+                            value="{{ form.business_no.data or '' }}">
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="company">상호</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="company" id="company"
+                           value="{{ form.company.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="zip">우편번호</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="zip" id="zip"
+                            value="{{ form.zip.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="address">사업장 주소</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="address" id="address"
+                            value="{{ form.address.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="business_status">업태</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="business_status" id="business_status"
+                            value="{{ form.business_status.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="business_item">종목</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="business_item" id="business_item"
+                            value="{{ form.business_item.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="email">이메일</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="email" id="email"
+                            value="{{ form.email.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.tel.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <!-- Input field with 40% width (4:6 ratio) -->
+                    <input type="text" class="form-control" name="tel" id="tel"
+                        value="{{ form.fax.data or '' }}" style="flex-basis: 45%;">
+                    <!-- Span with 60% width (4:6 ratio) -->
+                    <span style="flex-basis: 55%; margin-left: 10px;">[&nbsp;051-555-6666 형식으로 입력&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;">{{ form.fax.label }}</td>
+            <td style="width: 45%; text-align: left;">
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <input type="text" class="form-control" name="fax" id="fax"
+                            value="{{ form.fax.data or '' }}" style="flex-basis: 45%;">
+                    <span style="flex-basis: 55%; margin-left: 10px;">[&nbsp;051-555-6666 형식으로 입력&nbsp;]</span>
+                </div>
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="bank_name">거래은행명</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="bank_name" id="bank_name"
+                            value="{{ form.bank_name.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="bank_no">계좌번호</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="bank_no" id="bank_no"
+                            value="{{ form.bank_no.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="bank_account">소유자명</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="bank_account" id="bank_account"
+                            value="{{ form.bank_account.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 15%; text-align: left;"><label for="description">비고</label></td>
+            <td style="width: 45%; text-align: left;">
+                    <input type="text" class="form-control" name="description" id="description"
+                            value="{{ form.description.data or '' }}">
+            </td>
+            <td style="width: 40%;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <button type="submit" class="btn btn-primary">TRUCKMAN 회원 가입하기</button>
+            </td>
+        </tr>
+        </thead>
+        </table>
 
     </form>
 
+    </div>
 </div>
 
-{% endblock %}
-
+</body>
+</html>
 

@@ -1,0 +1,27 @@
+{% extends "shared/admin_base.html" %}
+
+{% block content %}
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome, {{ user.username }}!</p>
+
+        <div class="stats-section">
+            <h2>Statistics</h2>
+            <ul>
+                <li>Total Users: {{ total_users }}</li>
+                <li>Total Costs: {{ total_costs }}</li>
+                <li>New Register Today: {{ new_register_today }}</li>
+                <li>Total Revenue: ${{ total_revenue }}</li>
+            </ul>
+        </div>
+
+        <div class="quick-links">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="{{ url_for('admin.manage_users') }}">Manage Users</a></li>
+                <li><a href="{{ url_for('admin.manage_costs') }}">Manage Costs</a></li>
+
+            </ul>
+        </div>
+    </div>
+{% endblock %}

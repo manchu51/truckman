@@ -8,8 +8,10 @@
     {% include "form_errors.html" %}
 
 <div class="container-fluid">
+   <div class="scrollable-table-container">
      <table style="width:100%" class="table table-bordered table-striped">
-        <thead class="thead-dark">
+
+        <thead class="head-dark">
         <tr bgcolor="#ffddee">
             <th colspan="2" class="text-center"><h6><strong>업체 등록</strong></h6></th>
             <th class="text-center" ><label for="register_date">등록 일자</label></th>
@@ -26,7 +28,7 @@
                 </select>
             </td>
             <th colspan="1">&nbsp;</th>
-            <th colspan="5" class="text-center"><h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 :
+            <th colspan="5" class="text-center"><h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 :
                 {{ today|datetime('%Y-%m-%d') }} 시각 : {{ today|datetime('%H:%M:%S %p') }}
                         </strong></h6></th>
         </tr>

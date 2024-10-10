@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: flex-start; /* 수직 상단 정렬 */
+            min-height: 100vh; /* 뷰포트 전체 높이 */
+            padding: 20px;
+        }
+
+        .container {
+            width: 70%; /* 브라우저의 70% 너비 사용 */
+            max-width: 1200px; /* 최대 너비 */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-left: 10%; /* 왼쪽 여백을 10%로 설정 */
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #34495e;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            color: #e74c3c;
+        }
+
+        .indent {
+            margin-left: 20px;
+        }
+    </style>
+
+<div class="container">
+    <h1>TRUCKMAN 회사소개 </h1>
+    <p>TRUCKMAN 회사소개는 현재 작업 중에 있습니다. <br>
+        완성 되면 즉시 업로드 하겠습니다. </p>
+
+</div>
+
+{% endblock %}

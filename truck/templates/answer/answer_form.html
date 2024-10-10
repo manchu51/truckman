@@ -1,0 +1,90 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    textarea {
+    white-space: pre-wrap; /* 줄바꿈을 포함한 텍스트 유지 */
+    word-wrap: break-word; /* 단어가 넘칠 경우 줄바꿈 */
+}
+
+</style>
+
+<!-- 답변 수정 -->
+<div class="container my-3" style="max-width: 70%;">
+    <div class="scrollable-table-container">
+
+    <h5 class="my-3 border-bottom pb-2"><strong>답변 수정</strong></h5>
+    <form method="post">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
+        <div class="card-text"">    <!-- <div class="mb-3"> -->
+            <label for="content">답변내용</label>
+            <textarea style="background-color: #E6FFE6;" name="content" id="content"  rows="10"
+                      class="form-control" autofocus> {{ form.content.data or '' }}
+            </textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">답변 수정하기</button>
+    </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script type='text/javascript'>
+document.getElementById('content').addEventListener('focus', function() {
+    this.value = this.value.trimStart(); // 앞의 공백을 제거합니다.
+});
+
+
+let isComposing = false;
+
+textarea.addEventListener('compositionstart', () => {
+    isComposing = true;
+});
+
+textarea.addEventListener('compositionend', () => {
+    isComposing = false;
+    handleWordWrap(); // 입력이 끝난 후에만 줄바꿈 처리
+});
+
+function handleWordWrap() {
+    if (isComposing) return; // IME 입력 중이면 줄바꿈 처리하지 않음
+
+    const textarea = document.getElementById('content');
+    const text = textarea.value;
+    const maxChars = 30;
+
+    // 단어를 공백을 기준으로 분리
+    let words = text.split(' ');
+    let formattedText = '';
+    let currentLineLength = 0;
+
+    for (let i = 0; i < words.length; i++) {
+        let word = words[i];
+
+        // 단어가 30자 이상이면 강제 줄바꿈
+        if (currentLineLength + word.length + 1 > maxChars) {
+            formattedText += '\n';  // 줄바꿈 추가
+            currentLineLength = 0;  // 현재 줄 길이 초기화
+        }
+
+        // 줄에 단어 추가 (단어 사이에 공백 추가)
+        if (currentLineLength > 0) {
+            formattedText += ' ';
+            currentLineLength += 1; // 공백의 길이 추가
+        }
+
+        formattedText += word;
+        currentLineLength += word.length;
+    }
+
+    // 줄바꿈 적용된 텍스트를 다시 textarea에 설정
+    textarea.value = formattedText.trim();
+}
+
+</script>
+
+{% endblock %}

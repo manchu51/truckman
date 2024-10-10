@@ -14,35 +14,38 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-image: url('https://example.com/path/to/your/hopeful-image.jpg'); /* 긍정적인 배경 이미지 */
+            /* https://example.com/path/to/your/hopeful-image.jpg' */
             background-size: cover;
             background-position: center;
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 80vh; /* 화면 전체 높이 */
+            height: 80vh;                   /* 화면 전체 높이 */
             margin: 0;
         }
         .intro-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         h5 {
-            font-size: 18px; /* 폰트 크기 조정 */
+            font-size: 18px;                /* 폰트 크기 조정 */
+        }
+        h6 {
+            font-size: 16px;                /* 폰트 크기 조정 */
         }
         .truckman {
-            color: #87CEEB; /* 트럭맨에 하늘색 적용 */
+            color: #28A0FF;                 /* 트럭맨에 하늘색87CEEB </적용> */
         }
         .hope-path {
-            color: #FF6600; /* 희망의 길에 주황색 적용 */
+            color: #FF6464;                 /* 희망의 길에 주황색 적용#FF6600 */
         }
         .form-container {
             background-color: rgba(240, 248, 255, 0.9); /* 연한 파란색 배경 */
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 600px; /* 가로 최대 크기 400 -> 600px로 증가 */
+            max-width: 600px;               /* 가로 최대 크기 400 -> 600px로 증가 */
             width: 100%;
         }
         .form-container input {
@@ -54,27 +57,29 @@
             border-color: #87CEEB;
         }
         .container h6 {
-            font-size: 1.1rem; /* 글자 크기 조금 더 크게 */
+            font-size: 1.1rem;              /* 글자 크기 조금 더 크게 */
             margin-bottom: 20px;
-            text-align: left;     /* text-align: center; */
-           /* white-space: nowrap;  줄바꿈 방지 */
+            text-align: left;               /* text-align: center; */
+            white-space: nowrap;            /* 줄바꿈 방지 */
         }
         .signup-link {
-            color: #FF4500; /* 주황색으로 유도 */
+            color: #52E4DC;                       /* FF4500 주황색으로52E4DC 유도 32B2B2*/
             font-weight: bold;
             text-decoration: none;
         }
         .signup-link:hover {
-            color: #FF6347; /* 호버 시 약간 더 밝은 색 */
-            font-size: 1.2rem;
+            color: #FF6347;                 /* 호버 시 약간 더 밝은 색 */
+            font-size: 1.3rem;
         }
     </style>
 </head>
 
 <body>
-
 <div class="form-container">
-    <div class="intro-container">
+    <div class="intro-container" style="display: flex; align-items: center;">
+        <!-- 이미지 삽입 -->
+        <img src="{{ url_for('static', filename='images/logo.jpg') }}"
+             alt="트럭맨 로고" style="width: 200px; height: auto; margin-right: 40px;">
         <h5 align="left">
             <strong>
                 <span class="truckman">트럭맨</span> 여러분 ! <br>
@@ -86,28 +91,40 @@
     <form method="post" action="{{ url_for('auth.login') }}">
         {{ form.csrf_token }}
         {% include "form_errors.html" %}
-        <div class="mb-3">
-            <label for="username">회원 이름</label>
+
+    <div class="mb-3">
+        <label for="username">회원 아이디</label>
             <input type="text" class="form-control" name="username" id="username"
                    value="{{ form.username.data or '' }}">
-        </div>
-        <div class="mb-3">
-            <label for="password">비밀번호</label>
+    </div>
+
+    <div class="mb-3">
+        <label for="password">비밀번호</label>
             <input type="password" class="form-control" name="password" id="password"
                    value="{{ form.password.data or '' }}">
-        </div>
+    </div>
         <button type="submit" class="btn btn-primary w-100">로그인</button>
     </form>
 
-    <div class="container mt-4">
-        <h6><strong>처음 방문하시는 분은 아래 회원가입을 하여 주시기 바랍니다.</strong></h6>
+    <br>
+
+    <div class="intro-container">
+        <div class="row">
+            <div class="col">
+                <h5 align="center">
+                    <a href="{{ url_for('auth.terms') }}">회원 가입</a>
+                </h5>
+            </div>
+            <div class="col">
+                <h5 align="center">
+                    <a href="{{ url_for('auth.forgot_password') }}">아이디/패스워드 찾기</a>
+                </h5>
+            </div>
+        </div>
     </div>
 
-    <div class="container text-left">     <!-- text-center에서 text-left로 변경 -->
-        <a href="{{ url_for('auth.terms') }}" class="signup-link">회원 가입</a>
-    </div>
 </div>
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 
-<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
