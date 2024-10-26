@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- SimpleMDE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
     <title>Hello, truckman!</title>
 
     <style>
@@ -31,12 +34,16 @@
     <footer>
         {% include "bottom.html" %}
     </footer>
+
     <!-- Bootstrap JS -->
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <!-- SimpleMDE JS -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
     <!-- 자바스크립트 Start -->
     {% block script %}
     {% endblock %}
     <!-- 자바스크립트 End -->
+
 </body>
 </html>

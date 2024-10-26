@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<form method="POST" action="{{ url_for('admin.payment_update', id=payment.id) }}">
+    {{ form.csrf_token }}
+    {% include "form_errors.html" %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="container-fluid">
+        <div class="scrollable-table-container">
+            <table style="min-width: 1000px;" class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr bgcolor="#ffddee">
+                        <th colspan="4" class="text-center">
+                            <h6><strong>회비 입금수정</strong></h6>
+                        </th>
+                         <th colspan="2" class="text-center"><h6><strong>오늘 날짜 :
+                {{ today|datetime('%Y-%m-%d') }} 시각 : {{ today|datetime('%H:%M:%S %p') }}
+                        </strong></h6></th>
+                    </tr>
+
+                    <tr style="width:100%" bgcolor="#ddeeff">
+                        <th style="width:5%" class="text-center">NO</th>
+                        <th style="width:15%" class="text-center"><label for="payment_date">회비 입금일자</label></th>
+                        <th style="width:15%" class="text-center"><label for="truck_no">트럭번호</label></th>
+                        <th style="width:15%" class="text-center"><label for="payment_amount">입금금액</label></th>
+                        <th style="width:20%" class="text-center"><label for="annotation">비고</label></th>
+                        <th style="width:30%" class="text-center">&nbsp;</th>
+                    </tr>
+                </thead>
+
+                <tr style="width:100%" bgcolor="#ffffdd">
+                    <td align="center">1</td>
+                    <td>
+                        <input type="date" class="form-control" id="payment_date" name="payment_date"
+                               value="{{ payment.payment_date }}" placeholder="yyyy-mm-dd" style="width: 160px;" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="truck_no" name="truck_no"
+                               value="{{ user.truck_no }}" readonly>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" id="payment_amount" name="payment_amount"
+                               min="0" max="10000000" step="1" value="{{ payment.payment_amount }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="annotation" name="annotation"
+                               value="{{ payment.annotation }}" maxlength="32">
+                    </td>
+                    <td colspan="1" align="center">
+                        <button type="submit" class="btn btn-primary">회비 입금수정</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

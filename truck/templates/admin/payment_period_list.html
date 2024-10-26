@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">기간별 &nbsp;&nbsp;&nbsp;&nbsp; 회비 입금현황</h5>
+
+        {% if payments %}
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+            <thead class="head-dark">
+            <tr>
+                <th style="width:3%" class="text-center">NO</th>
+                <th style="width:8%" class="text-center">회원아이디</th>
+                <th style="width:8%" class="text-center">가입일자</th>
+                <th style="width:8%" class="text-center">트럭번호</th>
+                <th style="width:10%" class="text-center">회원이름</th>
+                <th style="width:8%" class="text-center">입금일자</th>
+                <th style="width:8%" class="text-center">입금금액</th>
+                <th style="width:8%" class="text-center">입금총금액</th>
+                <th style="width:8%" class="text-center">마감일자</th>
+                <th style="width:10%" class="text-center">비고</th>
+                <th style="width:7%" class="text-center">수정</th>
+                <th style="width:7%" class="text-center">삭제</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                {% set ns = namespace(payment_amount = 0, total_payment=0) %}
+                {% for idx, payment in enumerate(payments) %}
+
+            <tr>
+                <td align="center">{{ idx + 1 }}</td>
+                <td align="center">{{ payment.username }}</td>
+                <td align="center">{{ payment.register_date }}</td>
+                <td align="center">{{ payment.truck_no }}</td>
+                <td align="center">{{ payment.member_name }}</td>
+                <td>{{ payment.payment_date.strftime('%Y-%m-%d') if payment.payment_date else '날짜 없음' }}</td>
+                <td align="center">{{ "{:,.0f}".format(payment.payment_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td align="center">{{ "{:,.0f}".format(payment.total_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>{{ payment.suspension_date.strftime('%Y-%m-%d') if payment.suspension_date else '날짜 없음' }}</td>
+                <td align="center">{{ payment.annotation }}</td>
+                <td>
+                    <a href="{{ url_for('admin.payment_update', id=payment.id) }}"
+                        class="btn btn-warning">수정</a>
+                </td>
+                <td><a href="{{ url_for('admin.payment_delete', id=payment.id) }}"
+                       class="btn btn-danger btn-sm">삭제</a>
+                </td>
+            </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+
+        {% else %}
+            <p class="text-center">결제 기록이 없습니다.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+<!--   <td align="center">{{ payment.payment_date.strftime('%Y-%m-%d') }}</td>
+       <td align="center">{{ "{:,.0f}".format(payment.payment_amount) }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+       <td>{{ "{:,.0f}".format(payment.payment_amount) if payment.payment_amount is not None else '0' }}</td>
+ <td>{{ "{:,.0f}".format(payment.payment_amount) if payment.payment_amount is none else '0' }}</td>
+     <td align="center">{{ payment.suspension_date }}</td>
+-->

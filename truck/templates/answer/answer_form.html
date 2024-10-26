@@ -5,8 +5,16 @@
     textarea {
     white-space: pre-wrap; /* 줄바꿈을 포함한 텍스트 유지 */
     word-wrap: break-word; /* 단어가 넘칠 경우 줄바꿈 */
-}
+    }
 
+    /* SimpleMDE의 기본 설정 */
+    .editor {
+        background-color: transparent; /* 배경색을 투명으로 설정 */
+    }
+
+    .editor * {
+        background-color: transparent !important; /* 모든 요소의 배경색을 투명으로 설정 */
+    }
 </style>
 
 <!-- 답변 수정 -->
@@ -17,12 +25,26 @@
     <form method="post">
         {{ form.csrf_token }}
         {% include "form_errors.html" %}
-        <div class="card-text"">    <!-- <div class="mb-3"> -->
+        <div class="card-text"">    <!-- <div class="mb-3">  style="background-color: #E6FFE6;"-->
             <label for="content">답변내용</label>
-            <textarea style="background-color: #E6FFE6;" name="content" id="content"  rows="10"
+            <textarea name="content" id="markdown-editor" rows="10"
                       class="form-control" autofocus> {{ form.content.data or '' }}
             </textarea>
         </div>
+
+        <!-- SimpleMDE 마크다운 에디터 초기화 -->
+        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <script>
+            var simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
+
+            var simplemde = new SimpleMDE({
+                element: document.getElementById("editor"),
+                style: false // 기본 스타일을 비활성화
+            });
+
+        </script>
+
         <br>
         <button type="submit" class="btn btn-primary">답변 수정하기</button>
     </form>

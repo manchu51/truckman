@@ -1,9 +1,7 @@
 import os
-from config.default import *
 
-# __init__.py 에서 로드됨 중복 제거
-#from dotenv import load_dotenv
-#load_dotenv()  # Load environment variables from .env file
+from .default import DefaultConfig
+#from config.default import *
 
 db = {
     'user': os.getenv('DB_USER'),
@@ -13,7 +11,7 @@ db = {
     'database': os.getenv('DB_NAME')
 }
 
-DB_URL = f"mysql+pymysql://{db['user']}:{db['password']}@{db['host']}:{db['port']}/{db['database']}?charset=utf8"
+DB_URL = f"mysql+pymysql://{db['user']}:{db['password']}@{db['host']}:{db['port']}/{db['database']}?charset=utf8mb4"
 
 SQLALCHEMY_DATABASE_URI = DB_URL
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -32,4 +30,6 @@ MAIL_USE_SSL = False  # Disable SSL (since we're using TLS)
 MAIL_USERNAME = os.getenv('MAIL_USERNAME')  # Your Gmail address
 MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')  # App password or Gmail password
 MAIL_DEFAULT_SENDER = ('김영실', os.getenv('MAIL_USERNAME'))  # Sender's name and email
+
+
 

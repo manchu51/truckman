@@ -11,6 +11,12 @@
     <form method="post" class="my-3">
          {{ form.csrf_token }}
 
+        {% if category %}
+            <input type="hidden" name="category_id" value="{{ category.id }}">
+        {% else %}
+            <input type="hidden" name="category_id" value="0">
+        {% endif %}
+
          <!-- 오류표시 Start -->
          {% if form.errors %}
          <div class="alert alert-danger" role="alert">
@@ -35,13 +41,23 @@
          </div>
          <div class="mb-3">
               <label for="content"><h5>내용</h5></label>
-              <textarea style="background-color: #E6FFE6;" class="form-control"
-                        name="content" id="content" rows="10">
+              <textarea class="form-control"
+                        name="content" id="markdown-editor" rows="10">
                         {{ form.content.data or '' }}
               </textarea>
          </div>
 
-         <button type="submit" class="btn btn-primary">등록하기</button>
+        <!-- SimpleMDE 마크다운 에디터 초기화  style="background-color: #E6FFE6;"-->
+        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <script>
+            var simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
+        </script>
+
+
+        <div class="mb-3">
+        <button type="submit" class="btn btn-primary">질문 등록하기</button>
+        </div>
 
     </form>
 

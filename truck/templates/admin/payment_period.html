@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<form method="POST" >
+{{ form.csrf_token }}
+{% include "form_errors.html" %}
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+           <thead class="head-dark">
+           <tr bgcolor="#ffddee">
+               <td colspan="4" class="text-center"><h3>기간별 &nbsp;&nbsp;&nbsp;&nbsp; 회비 입금현황 검색</h3></td>
+               <td>&nbsp;</td>
+           </tr>
+           <tr>
+               <td style="width:10%" class="text-left"><label for="start_date"><u>시작 일자</u></label></td>
+               <td style="width:15%" class="text-center">{{ form.start_date(class="form-control") }}</td>
+               <td style="width:10%" class="text-center"><label for="end_date"><u>마지막 일자</u></label></td>
+               <td style="width:15%" class="text-center">{{ form.end_date(class="form-control") }}</td>
+               <td style="width:50%">&nbsp;</td>
+           </tr>
+           </thead>
+        </table>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">{{ form.submit() }}</button>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}

@@ -100,7 +100,7 @@
 
 <script>
     window.onload = function() {
-           window.print();
+         window.print();
     }
 
     window.onafterprint = function() {
@@ -147,7 +147,7 @@
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.trans_company }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.count }}</td>
             {% set ns.total_count = ns.total_count + (transport.count) %}
-            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ ' '.join(transport.load_region.split()[:3]) }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_amount) }}</td>
             {% set ns.G_total_amount = ns.G_total_amount + (transport.total_amount) %}
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_fee) }}</td>
@@ -161,7 +161,7 @@
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.consignor }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.count }}</td>
             {% set ns.total_count = ns.total_count + (transport.count) %}
-            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ ' '.join(transport.load_region.split()[:3]) }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_amount) }}</td>
             {% set ns.G_total_amount = ns.G_total_amount + (transport.total_amount) %}
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_fee) }}</td>
@@ -176,7 +176,7 @@
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.consignee }}</td>
             <td style="text-align:center">{{ transport.count }}</td>
             {% set ns.total_count = ns.total_count + (transport.count) %}
-            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ ' '.join(transport.load_region.split()[:3]) }}</td>
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.unload_region }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.total_amount) }}</td>
             {% set ns.G_total_amount = ns.G_total_amount + (transport.total_amount) %}
@@ -194,7 +194,6 @@
             <td align="center">{{ "{:,.0f}".format(ns.G_total_amount) }}&nbsp;&nbsp;</td>
             <td align="center">{{ "{:,.0f}".format(ns.G_total_fee) }}</td>
         </tr>
-
         </tbody>
 
     </table>

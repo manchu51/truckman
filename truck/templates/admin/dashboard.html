@@ -1,12 +1,15 @@
-{% extends "shared/admin_base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
-    <div class="dashboard-container">
-        <h1>Admin Dashboard</h1>
-        <p>Welcome, {{ user.username }}!</p>
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">Admin Dashboard
+            &nbsp;&nbsp;&nbsp;&nbsp; 회원현황&nbsp;&nbsp;&nbsp;&nbsp;Welcome, {{ user.username }}!</h5>
 
         <div class="stats-section">
-            <h2>Statistics</h2>
+            <h5>Statistics</h5>
             <ul>
                 <li>Total Users: {{ total_users }}</li>
                 <li>Total Costs: {{ total_costs }}</li>

@@ -179,6 +179,14 @@ th {
     }
 }
 
+/* SimpleMDE의 기본 설정 */
+.editor {
+    background-color: transparent; /* 배경색을 투명으로 설정 */
+}
+
+.editor * {
+    background-color: transparent !important; /* 모든 요소의 배경색을 투명으로 설정 */
+}
 
 
 

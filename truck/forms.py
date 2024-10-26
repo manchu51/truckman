@@ -1,9 +1,13 @@
 from flask_wtf import FlaskForm
+from flask import Blueprint, url_for, render_template, redirect, flash, request, session, g
+from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import (StringField, DateField, DecimalField, TextAreaField, PasswordField,
-                     EmailField, SelectField, IntegerField, FloatField, SubmitField)
+                     EmailField, SelectField, IntegerField, FloatField, SubmitField, validators)
 from wtforms.validators import (DataRequired, Length, Regexp, EqualTo, Email, ValidationError,
                                 NumberRange, Optional)
 from .models import User
+from .models import Category
+
 
 def cellphone_field():
     return StringField(
@@ -39,6 +43,15 @@ class QuestionForm(FlaskForm):
     subject = StringField('제목', validators=[DataRequired('제목은 필수입력 항목입니다.')])
     content = TextAreaField('내용', validators=[DataRequired('내용은 필수입력 항목입니다.')])
 
+    # 카테고리 필드 추가
+    #category = SelectField('Category', coerce=int, validators=[Optional()])
+    """
+    category = SelectField('Category', coerce=int, validators=[DataRequired()])
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 카테고리 선택 필드에 카테고리 목록 추가
+        self.category.choices = [(category.id, category.name) for category in Category.query.all()]
+    """
 
 class AnswerForm(FlaskForm):
     content = TextAreaField('내용', validators=[DataRequired('내용은 필수입력 항목입니다.')])
@@ -56,7 +69,7 @@ class UserCreateForm(FlaskForm):
     business_no = StringField('사업자등록번호')
     company = StringField('회사명')
     member_name = StringField('회원이름', validators=[DataRequired(), Length(min=2, max=12)])
-    zip = StringField('우편번호')
+    zip = StringField('우편번호', validators=[Optional(), Length(min=6, max=6)])
     address = StringField('주소')
     business_status = StringField('업태')
     business_item = StringField('종목')
@@ -70,14 +83,18 @@ class UserCreateForm(FlaskForm):
     description = StringField('비고')
     submit = SubmitField('Sign Up')
 
+
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('이미 존재하는 회원이름입니다. 다른 이름을 사용하여 주십시요.')
+        if not self.username.render_kw:  # Only validate on user creation
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('이미 존재하는 회원이름입니다. 다른 이름을 사용하여 주십시요.')
 
     def validate_email(self, field):
-        if field.data and User.query.filter_by(email=field.data).first():
+        user = User.query.filter_by(email=field.data).first()
+        if user and user.id != session.get('user_id'):  # Allow current user’s email
             raise ValidationError('이미 등록된 Email 입니다. 정확한 Email 을 등록하여 주십시요.')
+
 
 class UserLoginForm(FlaskForm):
     username = StringField('회원아이디', validators=[DataRequired(), Length(min=2, max=12)])
@@ -85,12 +102,53 @@ class UserLoginForm(FlaskForm):
     #email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Login')
 
+class UserModifyForm(FlaskForm):
+    username = StringField('회원아이디', validators=[DataRequired(), Length(min=2, max=12)])
+    password1 = PasswordField('비밀번호', validators=[
+        DataRequired(), Length(min=3, max=12), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
+    password2 = PasswordField('비밀번호확인', validators=[DataRequired()])
+    truck_name = StringField('트럭명칭')
+    truck_no = StringField('트럭번호', validators=[DataRequired('트럭번호는 필수입력 항목입니다.')])
+    truck_class = StringField('트럭종류')
+    truck_ton = DecimalField('트럭 톤수', places=1, validators=[Optional()])  # 입력 생략 가능
+    business_no = StringField('사업자등록번호')
+    company = StringField('회사명')
+    member_name = StringField('회원이름', validators=[DataRequired(), Length(min=2, max=12)])
+    zip = StringField('우편번호', validators=[Optional(), Length(min=6, max=6)])
+    address = StringField('주소')
+    business_status = StringField('업태')
+    business_item = StringField('종목')
+    email = StringField('Email', validators=[Optional(), Email()])
+    cellphone = cellphone_field()  # 공통 핸드폰 번호 필드를 사용
+    tel = tel_field()
+    fax = fax_field()
+    bank_name = StringField('은행명')
+    bank_no = StringField('계좌번호')
+    bank_account = StringField('소유자이름')
+    description = StringField('비고')
+    submit = SubmitField('회원정보 수정')
+
+    def validate_email(self, field):
+        user = User.query.filter_by(email=field.data).first()
+        if user and user.id != session.get('user_id'):  # Allow current user’s email
+            raise ValidationError('이미 등록된 Email 입니다. 정확한 Email 을 등록하여 주십시요.')
+
 class UserForgotForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     member_name = StringField('회원 이름', validators=[DataRequired(), Length(min=2, max=12)])
     cellphone = cellphone = cellphone_field()  # 함수를 호출하여 필드 할당StringField(
     truck_no = StringField('트럭 번호', validators=[DataRequired()])
+    submit = SubmitField('아이디/패스워드 찾기')
+
+
+class UserResetForm(FlaskForm):
+    password1 = PasswordField('비밀번호', validators=[
+        DataRequired(), Length(min=3, max=12),
+        EqualTo('password2', '비밀번호가 일치하지 않습니다.')
+    ])
+    password2 = PasswordField('비밀번호확인', validators=[DataRequired()])
     submit = SubmitField('비밀번호 재설정')
+
 
 class TransportForm(FlaskForm):
     trans_date = DateField('운송 일자', format='%Y-%m-%d', validators=[DataRequired()])
@@ -261,6 +319,20 @@ class DeleteForm(FlaskForm):
 
 class CancelForm(FlaskForm):
     submit = SubmitField('탈퇴')
+
+
+class PaymentCreateForm(FlaskForm):
+    payment_date = DateField('Payment Date', validators=[DataRequired()])
+    truck_no = StringField('트럭 번호', validators=[DataRequired()])
+    payment_amount = DecimalField('결제금액', validators=[DataRequired()])
+    annotation = StringField('비고', validators=[Optional()])
+    submit = SubmitField('회비 입금입력')
+
+
+class PaymentPeriodForm(FlaskForm):
+    start_date = DateField('Start Date', validators=[DataRequired()])
+    end_date = DateField('End Date', validators=[DataRequired()])
+    submit = SubmitField('회비 기간별 검색')
 
 
 

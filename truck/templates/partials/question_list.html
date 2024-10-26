@@ -1,0 +1,23 @@
+<!-- templates/partials/question_list.html -->
+<!-- D:\ChatGpt\카테고리.odt 참조 -->
+<ul>
+    {% for question in question_list.items %}
+        <li>
+            <a href="{{ url_for('question.detail', question_id=question.id) }}">
+                {{ question.subject }}
+            </a> - {{ question.create_date.strftime('%Y-%m-%d') }}
+        </li>
+    {% else %}
+        <li>질문이 없습니다.</li>
+    {% endfor %}
+</ul>
+
+<!-- 페이지네이션 -->
+<div>
+    {% if question_list.has_prev %}
+        <a href="?page={{ question_list.prev_num }}{% if category %}&category_id={{ category.id }}{% endif %}">이전</a>
+    {% endif %}
+    {% if question_list.has_next %}
+        <a href="?page={{ question_list.next_num }}{% if category %}&category_id={{ category.id }}{% endif %}">다음</a>
+    {% endif %}
+</div>

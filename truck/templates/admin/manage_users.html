@@ -1,41 +1,58 @@
-{% extends "shared/admin_base.html" %}
-
+{% extends "base.html" %}
 {% block content %}
-    <h1>User Management</h1>
+    <h5>User Management</h5>
 
     <!-- 상단에 오늘 날짜 및 시각 표시 -->
     <p>Today: {{ today.strftime('%Y-%m-%d %H:%M:%S') }}</p>
     <p>Total Users: {{ total_users }}</p>
 
-    <!-- 사용자 목록 테이블 -->
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>등록일자</th>
-                <th>가입자명</th>
-                <th>트럭번호</th>
-                <th>주소</th>
-                <th>마감일자</th>
-                <th>비고</th>
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <h5 class="text-center" style="color: #0000FF;">기간별 &nbsp;&nbsp;&nbsp;&nbsp; 회비 입금현황</h5>
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+            <thead class="head-dark">
+            <tr bgcolor="#ffddee">
+                <td colspan="3"><h5>User Management</h5></td>
+                <td colspan="4">&nbsp;&nbsp;Total Users: {{ total_users }}</td>
+                <td colspan="3" align="right">Today: {{ today.strftime('%Y-%m-%d %H:%M:%S') }}
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="text-center">Page {{ users.page }} of {{ users.pages }}</td>
+            </tr>
+            <tr style="width:100%">
+                <th style="width:3%" class="text-center">No</th>
+                <th style="width:8%" class="text-center">가입일자</th>
+                <th style="width:10%" class="text-center">회원아이디</th>
+                <th style="width:10%" class="text-center">트럭번호</th>
+                <th style="width:10%" class="text-center" >회원이름</th>
+                <th style="width:10%" class="text-center">핸드폰</th>
+                <th style="width:12%" class="text-center">주소</th>
+                <th style="width:8%" class="text-center">입금일자</th>
+                <th style="width:6%" class="text-center">입금금액</th>
+                <th style="width:8%" class="text-center">마감일자</th>
+                <th style="width:10%" class="text-center">비고</th>
             </tr>
         </thead>
         <tbody>
             {% for user in users.items %}
-                <tr>
-                    <td>{{ loop.index + (page - 1) * per_page }}</td>
-                    <td>{{ user.register_date.strftime('%Y-%m-%d') }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.truck_no }}</td>
-                    <td>{{ user.address }}</td>
-                    <td>{{ user.due_date.strftime('%Y-%m-%d') if user.due_date else 'N/A' }}</td>
-                    <td>{{ user.remarks or 'N/A' }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">No users found for the specified date range.</td>
-                </tr>
+            <tr>
+                <td class="text-center">{{ loop.index + (page - 1) * per_page }}</td>
+                <td class="text-center">{{ user.register_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ user.username }}</td>
+                <td class="text-center">{{ user.truck_no }}</td>
+                <td class="text-center">{{ user.member_name }}</td>
+                <td class="text-center">{{ user.cellphone }}</td>
+                <td>{{ ' '.join(user.address.split()[:2]) }}</td>
+                <td class="text-center">{{ user.payment_date.strftime('%Y-%m-%d') if user.payment_date else '미입금' }}</td>
+                <td>{{ user.payment_amount if user.payment_amount else 'N/A' }}</td>
+                <td class="text-center">{{ user.suspension_date.strftime('%Y-%m-%d') if user.suspension_date else 'N/A' }}</td>
+                <td>{{ user.annotation }}</td>
+            </tr>
             {% endfor %}
+
+            <tr>
+                <td colspan="11">No More users found for the specified date range.</td>
+            </tr>
+
         </tbody>
     </table>
 
@@ -63,3 +80,4 @@
         </div>
     </div>
 {% endblock %}
+

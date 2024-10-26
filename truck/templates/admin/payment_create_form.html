@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Remove the arrows/spinners from number inputs */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .date-time-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+
+    .wide-input {
+        width: 100%;
+    }
+</style>
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<form method="POST" action="{{ url_for('admin.payment_create') }}">
+{{ form.csrf_token }}
+{% include "form_errors.html" %}
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+        <table style="min-width: 1000px;" class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr bgcolor="#ffddee">
+            <th colspan="4" class="text-center"><h6><strong>회비 입력</strong></h6></th>
+            <th colspan="2" class="text-center"><h6><strong>오늘 날짜 :
+                {{ today|datetime('%Y-%m-%d') }} 시각 : {{ today|datetime('%H:%M:%S %p') }}
+                        </strong></h6></th>
+        </tr>
+
+        <tr style="width:100%" bgcolor="#ddeeff">
+            <th style="width:5%" class="text-center">NO</th>
+            <th style="width:15%" class="text-center" ><label for="payment_date">회비 입금일자</label></th>
+            <th style="width:15%" class="text-center"><label for="truck_no">트럭번호</label></th>
+            <th style="width:15%" class="text-center"><label for="payment_amount">입금금액</label></th>
+            <th style="width:20%" class="text-center"><label for="annotation">비고</label></th>
+            <th style="width:30%" class="text-center">&nbsp;</th>
+        </tr>
+        </thead>
+
+        <tr style="width:100%" bgcolor="#ffffdd">
+            <td align="center">NO</td>
+            <td><input type="date" class="form-control" id="payment_date" name="payment_date" placeholder="yyyy-mm-dd" style="width: 160px;" required></td>
+            <td><input type="text" class="form-control" id="truck_no" name="truck_no"></td>
+            <td><input type="number" class="form-control" id="payment_amount" name="payment_amount"
+                      min="0" max="10000000" step="1" required></td>
+            <td><input type="text" class="form-control" id="annotation" name="annotation" maxlength="32"></td>
+            <td colspan="1" align="center">
+                <button type="submit" class="btn btn-primary">회비 입금입력</button>
+            </td>
+        </tr>
+         <td colspan="5" align="center" style="vertical-align: bottom;">
+                <h6><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오늘 날짜 : {{ today|datetime('%Y-%m-%d') }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;회비 입금 현황</strong></h6>
+            </td>
+            <td colspan="1" align="center">&nbsp;</td>
+        </tr>
+
+            {% if payments %}
+            {% for idx, payment in enumerate(payments) %}
+        <tr>
+            <td align="center">{{ idx + 1 }}</td>
+            <td>{{ payment.payment_date }}</td>
+            <td>{{ user.truck_no }}</td>
+            <td align="right">{{ "{:,.0f}".format(payment.payment_amount) }}&nbsp;&nbsp;</td>
+            <td>{{ payment.annotation }}</td>
+        </tr>
+            {% endfor %}
+
+            {% else %}
+         <tr>
+             <td colspan="5" class="text-center">결제 기록이 없습니다.</td>
+         </tr>
+
+            {% endif %}
+
+        </table>
+    </div>
+</div>
+</form>
+
+{% endblock %}
+

@@ -146,9 +146,9 @@
             <td style="text-align:center; border: 1px solid #ddd;">{{ loop.index }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.trans_date }}</td>
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.consignor }}</td>
-            <td style="text-align:left; border: 1px solid #ddd;">{{ transport.load_region }}</td>
+            <td style="text-align:left; border: 1px solid #ddd;">{{ ' '.join(transport.load_region.split()[:3]) }}</td>
             <td style="text-align:left; border: 1px solid #ddd;">{{ transport.consignee }}</td>
-            <td style="text-align:left border: 1px solid #ddd;">{{ transport.unload_region }}</td>
+            <td style="text-align:left border: 1px solid #ddd;">{{ ' '.join(transport.unload_region.split()[:3]) }}</td>
             <td style="text-align:center; border: 1px solid #ddd;">{{ "{:,.0f}".format(transport.trans_amount) }}</td>
             {% set ns.total_amount = ns.total_amount + (transport.trans_amount) %}
             <td style="text-align:center; border: 1px solid #ddd;">{{ transport.comment }}

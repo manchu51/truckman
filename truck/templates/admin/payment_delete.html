@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span style="margin-left: 20px;" id="current_datetime"></span>
+
+<div class="container-fluid">
+    <div class="scrollable-table-container">
+
+    <h5 class="text-center" style="color: #0000FF;"> {{ payment.truck_no }} &nbsp;&nbsp;&nbsp;&nbsp; 회비입력 삭제/취소</h5>
+    <p>정말로 이 결제를 삭제하시겠습니까?</p>
+    <form method="POST" action="{{ url_for('admin.payment_delete', id=payment.id) }}">
+    {{ form.hidden_tag() }}
+
+        <button type="submit" class="btn btn-danger">삭제</button>
+
+        <a href="{{ url_for('admin.payment_period') }}" class="btn btn-secondary">취소</a>
+    </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
