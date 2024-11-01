@@ -3,7 +3,6 @@ from truck import mail  # mail 객체를 정의한 위치에서 가져옴
 from flask import url_for, current_app
 import os
 from itsdangerous import URLSafeTimedSerializer
-
 def get_reset_token(user_id):
     """비밀번호 재설정 토큰 생성"""
     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
@@ -24,4 +23,6 @@ def send_reset_email(user, token):
     만약 본인이 요청하지 않았다면 이 이메일을 무시하세요.
     '''
     mail.send(msg)
+
+
 
